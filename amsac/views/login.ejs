@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン</title>
+  <link rel="stylesheet" href="/amsac/public/stylesheets/login_style.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>ログイン</h2>
+
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST">
+      <label for="user">ユーザー名</label>
+      <input type="text" id="user" name="user" required>
+
+      <label for="password">パスワード</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit" name="login">ログイン</button>
+    </form>
+
+    <div class="navigation-buttons">
+      <form action="/register" method="GET">
+        <button type="submit" name="signup">ユーザー登録へ</button>
+      </form>
+
+      <form action="/" method="GET">
+        <button type="submit" name="hp">ホームへ戻る</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
