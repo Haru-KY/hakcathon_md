@@ -43,6 +43,23 @@ button:hover {
   background-color: #0056b3;
 }
 
+.button-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.button-link:hover {
+  background-color: #0056b3;
+}
+
+
 .error {
   color: red;
   margin-bottom: 1rem;
