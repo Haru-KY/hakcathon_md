@@ -6,7 +6,7 @@ import users from "../db/users.js";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('home', { title: 'Amsac' });
 });
 
 export default router;
