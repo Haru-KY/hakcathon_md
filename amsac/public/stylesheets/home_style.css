@@ -1,50 +1,90 @@
+/* 基本設定 */
 body {
-  font-family: sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
+  background-color: #a5c1aa; /* ベースカラー */
+  color: #333;
+  font-size: 16px;
+  line-height: 1.8em;
 }
 
-/* .top-right-btn {
-  position: fixed;     
-  top: 20px;           
-  right: 20px;         
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 1000;       
-  background-color: #0056b3;
-  transform: scale(1.05);
-  transition: 0.2s;
-} */
+h2, h3 {
+  margin-top: 0;
+  color: #434b54; /* accent */
+}
 
+h1 {
+  margin-top: 0;
+  color: #fff;
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p, li {
+  font-size: 1rem;
+}
+
+/* ヘッダー */
 header {
-  background: #007bff;
-  color: white;
-  padding: 1rem;
+  background-color: #6b4c3b; /* メインカラー */
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
+.header-left h1 {
+  margin: 0;
 }
 
+.subheading {
+  font-size: 0.85rem;
+  margin: 0;
+  color: #fff;
+}
+
+.login-btn {
+  background-color: #f6d6c1; /* base */
+  color: #6b4c3b; /* accent */
+  border: 2px solid #6b4c3b;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #eec7b4;
+}
+
+/* メイン */
+main {
+  padding: 2rem 1.5rem;
+}
+
+/* ヒーロー */
 .hero {
-  text-align: center;
+  background-color: #ffffff;
   padding: 2rem;
-  background-color: #f1f1f1;
+  text-align: center;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* 特徴リスト */
 .features, .about {
-  padding: 1rem 2rem;
+  margin-bottom: 2rem;
 }
 
 .features ul {
@@ -53,21 +93,40 @@ nav a {
 }
 
 .features li {
-  margin: 0.5rem 0;
-}
-
-button {
-  background-color: #4285F4;
-  color: white;
-  padding: 0.8rem 1.2rem;
-  border: none;
+  background-color: #fff;
+  border-left: 6px solid #a5c1aa;
+  margin-bottom: 1rem;
+  padding: 1rem;
   border-radius: 5px;
-  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+/* フッター */
 footer {
-  background: #333;
+  background-color: #6b4c3b; /* accent */
   color: white;
   text-align: center;
   padding: 1rem;
+  font-size: 0.85rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .login-btn {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .hero {
+    padding: 1.5rem 1rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
 }
