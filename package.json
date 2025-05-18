@@ -1,7 +1,13 @@
 {
   "type": "module",
   "dependencies": {
+    "mysql2": "^3.14.1",
+    "express": "^5.1.0",
     "knex": "^3.1.0",
-    "mysql2": "^3.14.1"
+    "express-session": "^1.17.3",
+    "googleapis": "^132.0.0",
+    "ollama": "^0.1.0",            
+    "dotenv": "^16.3.1"
   }
 }
+
