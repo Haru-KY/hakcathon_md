@@ -1,64 +1,46 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automatic massage summarization and classification AI</title>
-    <link rel="stylesheet" href="/amsac/public/stylesheets/home_style.css">
-    <style>
-    /* ログインボタンのUI:style.cssでの実行ができなかったためこちらに移動 */
-    .top-right-btn {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        font-size: 1rem;
-        cursor: pointer;
-        z-index: 1000;
-    }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amsac AI | 自動メール要約・分類システム</title>
+  <link rel="stylesheet" href="/stylesheets/home_style.css" />
 </head>
 <body>
-    <form action="/login" method="POST">
-    
-        <button class="top-right-btn" name="login" value="login">ログイン</button>
-
+  <header>
+    <div class="header-left">
+      <h1>Amsac AI</h1>
+      <p class="subheading">Automatic message summarization and classification AI</p>
+    </div>
+    <form action="/login" method="POST" class="header-right">
+      <button class="login-btn" name="login" value="login">ログイン</button>
     </form>
-    <header>
-        <h1>Amsac AI</h1>
-    </header>
+  </header>
 
-    <main>
-        <section class="hero">
-            <h2>Emailをもっとスマートに。</h2>
-            <p>AIによる自動タグ付け・スパム判定・検索機能をこのサービスで。</p>
-        </section>
+  <main>
+    <section class="hero">
+      <h2>Emailをもっとスマートに。</h2>
+      <p>AIによる自動タグ付け・スパム判定・検索機能をこのサービスで。</p>
+    </section>
 
-        <section class="features">
-            <h3>主な機能</h3>
-            <ul>
-                <li>📌 自動タグ付け：AIがメールの内容を理解して、適切なタグを自動で付けます</li>
-                <li>🔍 タグ検索：付けられたタグで、必要なメールをすぐに探せます</li>
-                <li>🚫 スパム分類：迷惑メールを自動で判定して、フィルタリングします</li>
-                <li>⭐ Gmailスター連携（予定）：重要なメールにスターをつけて一括管理</li>
-            </ul>
+    <section class="features">
+      <h3>主な機能</h3>
+      <ul>
+        <li><strong>📌 自動タグ付け：</strong>メール内容に基づきAIが適切なタグを自動生成</li>
+        <li><strong>🔍 タグ検索：</strong>付けられたタグで必要なメールを即検索</li>
+        <li><strong>🚫 スパム分類：</strong>迷惑メールを高精度で自動分類</li>
+        <li><strong>⭐ メールスター連携：</strong>重要メールのスター管理（近日対応）</li>
+      </ul>
+    </section>
 
-            <h3>使用技術</h3>
-            <ul>
-                <li>LLM</li>
-                <li>Google API</li>
-            </ul>
-        </section>
+    <section class="about">
+      <h3>このサービスについて</h3>
+      <p>Amsac AIは、メールの使い勝手を次のレベルへ引き上げるAIサポートツールです。<br>面倒な操作は不要、誰でも簡単に扱えます。</p>
+    </section>
+  </main>
 
-        <section class="about">
-            <h3>このサービスについて</h3>
-            <p>Gmail Smart System は、Gmailの使いやすさを大きくアップデートするAI支援ツールです。<br>
-            難しい操作は一切不要。</p>
-        </section>
-    </main>
+  <footer>
+    <p>&copy; 2025 Amsac AI. All rights reserved.</p>
+  </footer>
 </body>
 </html>
