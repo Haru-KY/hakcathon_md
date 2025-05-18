@@ -1,6 +1,7 @@
 import mysql from 'mysql2';
 import express from 'express';
 const router = express.Router();
+import bcrypt from 'bcrypt';
 
 import knex from "../db/users.js";
 
@@ -22,6 +23,7 @@ router.get('/login', function (req, res, next) {
 router.post('/', function( req, res, next ) {
 
     console.log("POST /register reached");
+    console.log(req.body);
 
     const username = req.body.user;
     const password = req.body.password;
@@ -30,7 +32,7 @@ router.post('/', function( req, res, next ) {
     knex("users")
         .where({name: username})
         .select("*")
-        .then(function (result) {
+        .then(async function (result) {
 
             if (result.length !== 0){
 
@@ -42,8 +44,10 @@ router.post('/', function( req, res, next ) {
             }
             else if (password === repassword) {
 
+                const hashedPassword = await bcrypt.hash(password, 10);
+                console.log(hashedPassword);
                 knex("users")
-                .insert({name: username, password: password})
+                .insert({name: username, password: hashedPassword})
                 .then( function () {
 
                     res.redirect("/login");
