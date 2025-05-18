@@ -2,13 +2,13 @@ import mysql from 'mysql2';
 import express from 'express';
 const router = express.Router();
 
-import users from "../db/users.js";
+import knex from "../db/users.js";
 
-router.get("/", function (req, res, next){
+router.get('/', function(req, res, next){
 
-    res.render('login',{
-        title: 'login',
-        error: null
+    res.render('login', {
+            title: 'login',
+            error: null
     });
 });
 
@@ -25,7 +25,7 @@ router.post("/", function (req, res, next){
     const username = req.body.user;
     const password = req.body.password;
 
-    users("users")
+    knex("users")
         .where( {
 
             name: username,
@@ -47,7 +47,7 @@ router.post("/", function (req, res, next){
             } else {
 
                 req.session.userid = results[0].id;
-                res.redirect('/');
+                res.redirect('/add');
 
             }
 

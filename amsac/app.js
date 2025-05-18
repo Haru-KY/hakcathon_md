@@ -4,6 +4,8 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 import { fileURLToPath } from 'url';
 
