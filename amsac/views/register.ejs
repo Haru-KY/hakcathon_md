@@ -17,7 +17,7 @@
 
     <form action="/register" method="POST">
       <label for="name">名前</label>
-      <input type="text" id="name" name="name" required>
+      <input type="text" id="user" name="user" required>
 
       <label for="password">パスワード</label>
       <input type="password" id="password" name="password" required>
@@ -30,8 +30,13 @@
 
     <!-- ページ移動用のリンク -->
     <div class="navigation-links">
-      <a href="/login" class="button-link">ログインページへ</a>
-      <a href="/" class="button-link">ホームに戻る</a>
+      <form action="/login" method="GET">
+        <button type="submit" name="login">ログインページへ</button>
+      </form>
+
+      <form action="/" method="GET">
+        <button type="submit" name="hp">ホームに戻る</button>
+      </form>
     </div>
   </div>
 
