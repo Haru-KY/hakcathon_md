@@ -1,6 +1,7 @@
 import mysql from 'mysql2';
 import express from 'express';
 const router = express.Router();
+import cookieParser from 'cookie-parser';
 
 import knex from "../db/users.js";
 
@@ -21,6 +22,8 @@ router.get("/register", function (req, res, next){
 });
 
 router.post("/", function (req, res, next){
+
+    console.log("req.body:", req.body);
 
     const username = req.body.user;
     const password = req.body.password;
@@ -47,7 +50,13 @@ router.post("/", function (req, res, next){
             } else {
 
                 req.session.userid = results[0].id;
-                res.redirect('/add');
+                res.cookie("userid", results[0].id, {
+
+                    httpOnly: true,
+                    maxAge: 1000 * 60 * 60
+
+                });
+                res.redirect("/add");
 
             }
 
