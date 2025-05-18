@@ -9,8 +9,9 @@ body {
   margin: 0 auto;
   background: white;
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  box-shadow: 0 0px 10px rgba(0,0,0,0.1);
+  width: 300px;
 }
 
 h2 {
@@ -22,7 +23,7 @@ input[type="text"],
 input[type="email"],
 input[type="password"] {
   width: 100%;
-  padding: 0.8rem;
+  padding: 0.5rem;
   margin: 0.5rem 0 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -30,12 +31,12 @@ input[type="password"] {
 
 button {
   width: 100%;
-  padding: 0.8rem;
-  background-color: #007bff;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #4285F4;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
 }
 
