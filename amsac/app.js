@@ -4,6 +4,8 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 import { fileURLToPath } from 'url';
 
@@ -23,10 +25,19 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+
+  secret: "mdmdMDMD*!*",
+  resave: false,
+  saveUninitialized: true,
+
+}));
 
 app.use('/', homeRouter);
 app.use('/users', usersRouter);

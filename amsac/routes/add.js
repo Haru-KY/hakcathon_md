@@ -7,7 +7,12 @@ import users from "../db/users.js";
 
 router.get( '/', function( req, res, next) {
 
-    res.render( 'add', {title: "main page", error: null});
+    if( !req.session.userid )
+    {
+        return res.redirect("/login");
+    }
+
+    res.render( 'add', {title: "main page", userId: req.session.userid });
 
 });
 
