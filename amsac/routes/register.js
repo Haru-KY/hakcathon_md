@@ -2,7 +2,7 @@ import mysql from 'mysql2';
 import express from 'express';
 const router = express.Router();
 
-import users from "../db/users.js";
+import knex from "../db/users.js";
 
 router.get('/', function (req, res, next) {
   res.render('register', {
@@ -19,13 +19,15 @@ router.get('/login', function (req, res, next) {
     });
 });
 
-router.post('/register', function( req, res, next ) {
+router.post('/', function( req, res, next ) {
+
+    console.log("POST /register reached");
 
     const username = req.body.user;
     const password = req.body.password;
     const repassword = req.body.repassword;
 
-    users("users")
+    knex("users")
         .where({name: username})
         .select("*")
         .then(function (result) {
@@ -40,11 +42,11 @@ router.post('/register', function( req, res, next ) {
             }
             else if (password === repassword) {
 
-                users("users")
+                knex("users")
                 .insert({name: username, password: password})
                 .then( function () {
 
-                    res.redirect("/");
+                    res.redirect("/login");
 
                 })
                 .catch( function (err) {
