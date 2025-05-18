@@ -1,6 +1,6 @@
 // var cookieParser = require('cookie-parser');
 
-import http_er from 'http-errors';
+import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
@@ -8,8 +8,10 @@ import logger from 'morgan';
 import { fileURLToPath } from 'url';
 
 import indexRouter from './routes/index.js';
+import homeRouter from './routes/home.js';
 import usersRouter from './routes/users.js';
-
+import loginRouter from './routes/login.js';
+import regiRouter from './routes/register.js';
 var app = express();
 
 // view engine setup
@@ -25,8 +27,10 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', homeRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter);
+app.use('/register', regiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
