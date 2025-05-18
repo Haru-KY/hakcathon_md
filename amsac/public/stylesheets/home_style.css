@@ -130,3 +130,50 @@ footer {
     padding: 1rem;
   }
 }
+/* ローディング画面 */
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #6b4c3b; /* メインカラー */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: logoFadeIn 1.5s ease-out;
+}
+
+.intro-logo {
+  color: white;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  animation: logoZoom 1s ease-out;
+}
+
+/* 非表示クラス */
+.hidden {
+  display: none;
+}
+
+/* フェードアウト */
+.fade-out {
+  animation: fadeOut 1s ease-in forwards;
+}
+
+/* アニメーションキーフレーム */
+@keyframes logoFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes logoZoom {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
