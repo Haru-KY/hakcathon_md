@@ -1,50 +1,94 @@
-body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
+/* 基本設定 */
+html {
+  scroll-behavior: smooth;
 }
 
-/* .top-right-btn {
-  position: fixed;     
-  top: 20px;           
-  right: 20px;         
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 1000;       
-  background-color: #0056b3;
-  transform: scale(1.05);
-  transition: 0.2s;
-} */
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #a5c1aa; /* ベースカラー */
+  color: #333;
+  font-size: 16px;
+  line-height: 1.8em;
+}
 
+h2, h3 {
+  margin-top: 0;
+  color: #434b54; /* accent */
+}
+
+h1 {
+  margin-top: 0;
+  color: #fff;
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p, li {
+  font-size: 1rem;
+}
+
+/* ヘッダー */
 header {
-  background: #007bff;
-  color: white;
-  padding: 1rem;
+  background-color: #6b4c3b; /* メインカラー */
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
+.header-left h1 {
+  margin: 0;
 }
 
+.subheading {
+  font-size: 0.85rem;
+  margin: 0;
+  color: #fff;
+}
+
+.login-btn {
+  background-color: #f6d6c1; /* base */
+  color: #6b4c3b; /* accent */
+  border: 2px solid #6b4c3b;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #eec7b4;
+}
+
+/* メイン */
+main {
+  padding: 2rem 1.5rem;
+}
+
+/* ヒーロー */
 .hero {
-  text-align: center;
+  background-color: #ffffff;
   padding: 2rem;
-  background-color: #f1f1f1;
+  text-align: center;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* 特徴リスト */
 .features, .about {
-  padding: 1rem 2rem;
+  margin-bottom: 2rem;
 }
 
 .features ul {
@@ -53,21 +97,320 @@ nav a {
 }
 
 .features li {
-  margin: 0.5rem 0;
-}
-
-button {
-  background-color: #4285F4;
-  color: white;
-  padding: 0.8rem 1.2rem;
-  border: none;
+  background-color: #fff;
+  border-left: 6px solid #a5c1aa;
+  margin-bottom: 1rem;
+  padding: 1rem;
   border-radius: 5px;
-  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+/* フッター */
 footer {
-  background: #333;
+  background-color: #6b4c3b; /* accent */
   color: white;
   text-align: center;
   padding: 1rem;
+  font-size: 0.85rem;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .login-btn {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .hero {
+    padding: 1.5rem 1rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+}
+/* ローディング画面 */
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #6b4c3b; /* メインカラー */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: logoFadeIn 1.5s ease-out;
+}
+
+.intro-logo {
+  color: white;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  animation: logoZoom 1s ease-out;
+}
+
+/* 非表示クラス */
+.hidden {
+  display: none;
+}
+
+/* フェードアウト */
+.fade-out {
+  animation: fadeOut 1s ease-in forwards;
+}
+
+/* アニメーションキーフレーム */
+@keyframes logoFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes logoZoom {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* スライダー全体 */
+.slide {
+  flex: 0 0 100%;
+  opacity: 0.4;
+  transform: scale(0.9);
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+/* スライド画像コンテナ */
+.slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* 各スライド画像 */
+.slide {
+  width: 100%;
+  flex-shrink: 0;
+  /* display: none; */
+}
+
+/* アクティブなスライド */
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ナビゲーション矢印 */
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.prev:hover, .next:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+.carousel-container {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.slide {
+  min-width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-btn.next {
+  right: 10px;
+}
+
+/* Hero Section */
+.hero-section {
+  background-image: url('/images/hero-bg.jpg'); /* 任意の背景画像を配置 */
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+  position: relative;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.4);
+  display: inline-block;
+  padding: 40px 60px;
+  border-radius: 12px;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  background-color: #6b4c3b; /* メインカラー */
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.hero-btn:hover {
+  background-color: #5a3f32;
+}
+
+.about {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.about.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 特徴 Section */
+.features-section {
+  padding: 60px 20px;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.features-section h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #434b54;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.feature {
+  max-width: 280px;
+  text-align: center;
+}
+
+.feature img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.feature h3 {
+  font-size: 1.2rem;
+  color: #6b4c3b;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* お知らせ Section */
+.news-section {
+  padding: 60px 20px;
+  background-color: #eaf0ea; /* ベースカラーに合わせた明るめトーン */
+}
+
+.news-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #434b54;
+  text-align: center;
+}
+
+.news-list {
+  list-style: none;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.news-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.news-list li span {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #6b4c3b;
 }

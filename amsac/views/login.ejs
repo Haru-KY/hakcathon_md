@@ -22,7 +22,7 @@
       <label for="password">パスワード</label>
       <input type="password" id="password" name="password" required>
 
-      <button type="submit" name="login">ログイン</button>
+      <button type="submit">ログイン</button>
     </form>
 
     <div class="navigation-buttons">
@@ -30,9 +30,11 @@
         <button type="submit" name="register">ユーザー登録へ</button>
       </form>
 
-      <form action="/" method="GET">
-        <button type="submit" name="hp">ホームへ戻る</button>
-      </form>
+    <form action="/" method="GET">
+      <input type="hidden" name="skipIntro" value="true" />
+      <button type="submit" name="hp">ホームへ戻る</button>
+    </form>
+
     </div>
   </div>
 

@@ -10,9 +10,9 @@ const config = {
 
     client: 'mysql2',
     connection: {
-      database: "users",
+      database: "amsac",
       user: "root",
-      password: "harutoon424722!@!",
+      password: "mdmdMDMD",
 
     },
     pool: {

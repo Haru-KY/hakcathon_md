@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             a.textContent = value;
 
             const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = "✘";
+            deleteBtn.textContent = "✖";
             deleteBtn.className = "delete-btn";
             deleteBtn.style.marginLeft = "8px";
             deleteBtn.addEventListener('click', function () {
@@ -82,7 +82,7 @@ document.getElementById('ai-submit').addEventListener('click', function () {
         a.textContent = value;
 
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = "✘";
+        deleteBtn.textContent = "✖";
         deleteBtn.className = "delete-btn";
         deleteBtn.style.marginLeft = "8px";
         deleteBtn.addEventListener('click', function () {
