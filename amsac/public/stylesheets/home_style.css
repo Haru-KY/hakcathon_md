@@ -1,4 +1,8 @@
 /* 基本設定 */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Helvetica Neue', sans-serif;
   margin: 0;
@@ -176,4 +180,237 @@ footer {
 @keyframes fadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+
+/* スライダー全体 */
+.slide {
+  flex: 0 0 100%;
+  opacity: 0.4;
+  transform: scale(0.9);
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+/* スライド画像コンテナ */
+.slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* 各スライド画像 */
+.slide {
+  width: 100%;
+  flex-shrink: 0;
+  /* display: none; */
+}
+
+/* アクティブなスライド */
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ナビゲーション矢印 */
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.prev:hover, .next:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+.carousel-container {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.slide {
+  min-width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.carousel-btn.prev {
+  left: 10px;
+}
+
+.carousel-btn.next {
+  right: 10px;
+}
+
+/* Hero Section */
+.hero-section {
+  background-image: url('/images/hero-bg.jpg'); /* 任意の背景画像を配置 */
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+  position: relative;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.4);
+  display: inline-block;
+  padding: 40px 60px;
+  border-radius: 12px;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  background-color: #6b4c3b; /* メインカラー */
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.hero-btn:hover {
+  background-color: #5a3f32;
+}
+
+.about {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.about.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 特徴 Section */
+.features-section {
+  padding: 60px 20px;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.features-section h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #434b54;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.feature {
+  max-width: 280px;
+  text-align: center;
+}
+
+.feature img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.feature h3 {
+  font-size: 1.2rem;
+  color: #6b4c3b;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* お知らせ Section */
+.news-section {
+  padding: 60px 20px;
+  background-color: #eaf0ea; /* ベースカラーに合わせた明るめトーン */
+}
+
+.news-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #434b54;
+  text-align: center;
+}
+
+.news-list {
+  list-style: none;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.news-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.news-list li span {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #6b4c3b;
 }

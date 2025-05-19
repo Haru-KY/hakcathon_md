@@ -24,7 +24,71 @@
       </form>
     </header>
 
-    <main>
+    <!-- home.ejs（スライダー部分） -->
+    <div class="carousel-container">
+        <div class="carousel-track">
+            <img src="/images/demo1.png" class="slide active" />
+            <img src="/images/demo2.png" class="slide" />
+            <img src="/images/demo3.png" class="slide" />
+        </div>
+        <!-- <button class="carousel-btn prev">&#10094;</button>
+        <button class="carousel-btn next">&#10095;</button> -->
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+    <div class="hero-content">
+        <h1>あなたの毎日を、もっとスマートに。</h1>
+        <p>私たちのサービスは、お客様の生活をもっと自由にします。</p>
+        <a href="#!" class="hero-btn" id="show-about">詳しく見る</a>
+    </div>
+    </section>
+
+    <section class="about" id="about">
+        <h3>このサービスについて</h3>
+        <p>
+            Amsac AIは、メールの使い勝手を次のレベルへ引き上げるAIサポートツールです。<br>
+            面倒な操作は不要、誰でも簡単に扱えます。
+        </p>
+    </section>
+
+
+    <!-- 特徴 Section -->
+    <section class="features-section">
+    <h2>システムの特徴</h2>
+    <div class="features">
+        <div class="feature">
+        <img src="/images/feature1.png" alt="特徴1">
+        <h3>AIが自動で整理整頓</h3>
+        <p>届いたメールをAIが自動で読み取り、内容に応じて最適なタグを付与。
+        <br>フォルダ分けの手間を省き、すぐに確認すべきメールがひと目でわかります。</p>
+        </div>
+        <div class="feature">
+        <img src="/images/feature2.png" alt="特徴2">
+        <h3>重要なポイントを瞬時に把握</h3>
+        <p>AIが長文メールの要点を自動で要約。
+        <br>移動中や忙しいときでも、読むべきポイントだけをスムーズに把握できます。</p>
+        </div>
+        <div class="feature">
+        <img src="/images/feature3.png" alt="特徴3">
+        <h3>業務の効率化と見落とし防止</h3>
+        <p>タグ分類と要約により、大事な連絡の見落としを防ぎつつ、
+        <br>日々のメール処理にかかる時間を大幅に削減できます。</p>
+        </div>
+    </div>
+    </section>
+
+    <!-- お知らせ Section -->
+    <section class="news-section">
+    <h2>お知らせ</h2>
+    <ul class="news-list">
+        <li><span>2025/05/01</span> ゴールデンウィークの営業日について</li>
+        <li><span>2025/04/20</span> 新機能追加のお知らせ</li>
+    </ul>
+    </section>
+
+
+    <!-- <main>
       <section class="hero">
         <h2>Emailをもっとスマートに。</h2>
         <p>AIによる自動タグ付け・スパム判定・検索機能をこのサービスで。</p>
@@ -44,7 +108,7 @@
         <h3>このサービスについて</h3>
         <p>Amsac AIは、メールの使い勝手を次のレベルへ引き上げるAIサポートツールです。<br>面倒な操作は不要、誰でも簡単に扱えます。</p>
       </section>
-    </main>
+    </main> -->
 
     <footer>
       <p>&copy; 2025 Amsac AI. All rights reserved.</p>
@@ -75,5 +139,8 @@
     }
   });
 </script>
+
+<script src="/javascripts/slider.js" defer></script>
+<script src="/javascripts/hero.js" defer></script>
 </body>
 </html>
