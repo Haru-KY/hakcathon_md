@@ -20,7 +20,10 @@
                 </div>
             </form>
             <ul>
-                <li name="hp"><a href="./">HOME</a></li>
+                
+                <form action="/" >
+                    <li name="hp"><a href="/">HOME</a></li>
+                </form>
                 <li class="tag-btn">
                     <div class="tag-label">
                         <a href="#">TAG</a>
@@ -43,8 +46,12 @@
                         <li><a href="#">Tag 3</a></li>
                     </ul>
                 </li>
-                <li name="logout"><a href="./login">LOGOUT</a></li>
-                <li name="delete"><a href="#">Account delete</a></li>
+                <form action="/login" >
+                <li name="logout"><a href="/login">LOGOUT</a></li>
+                </form>
+                <from action="/" >
+                    <li name="delete"><a href="/">Account delete</a></li>
+                </from>
             </ul>
         </nav>
     </header>

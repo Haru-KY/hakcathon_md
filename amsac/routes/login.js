@@ -2,13 +2,18 @@ import mysql from 'mysql2';
 import express from 'express';
 const router = express.Router();
 import cookieParser from 'cookie-parser';
+import bcrypt from 'bcrypt';
 
 import knex from "../db/users.js";
 
 router.get('/', function(req, res, next){
 
+    const userId = req.session.userid;
+    const isAuth = Boolean(userId);
+
     res.render('login', {
             title: 'login',
+            isAuth: isAuth,
             error: null
     });
 });
@@ -21,59 +26,58 @@ router.get("/register", function (req, res, next){
     });
 });
 
-router.post("/", function (req, res, next){
+router.post("/", async function (req, res, next){
 
     console.log("req.body:", req.body);
 
-    const username = req.body.user;
-    const password = req.body.password;
+    const { user: username, password } = req.body;
 
-    knex("users")
-        .where( {
+    try{
 
-            name: username,
-            password: password
+        const user = await knex("users").where({ name: username }).first();
+    
+        if (!user){
 
-        } )
-        .select("*")
-        .then((results) => {
-
-            if ( results.length === 0 ) {
-
-                res.render("login", {
-
-                    title: "login",
-                    error: ["ユーザが見つかりません"]
-
-                });
-
-            } else {
-
-                req.session.userid = results[0].id;
-                res.cookie("userid", results[0].id, {
-
-                    httpOnly: true,
-                    maxAge: 1000 * 60 * 60
-
-                });
-                res.redirect("/add");
-
-            }
-
-        })
-        .catch( function (err) {
-
-            console.error(err);
-            res.render("login", {
+            return res.render("login", {
 
                 title: "login",
-                error: [err.sqlMessage],
+                error: ["ユーザが見つかりません"],
                 isAuth: false
-                
+
             });
+
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if(!match){
+            return res.render("login", {
+
+                title: "login",
+                error: ["パスワードが一致しません"],
+                isAuth: false
+            });
+        }
+
+        req.session.userid = user.id;
+        res.cookie("userid", user.id, {
+
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60
 
         });
 
+        return res.redirect("/add");
+    } catch (err) {
+        console.error(err);
+        res.render("login", {
+
+            title:"login",
+            error: ["システムエラーが発生しました"],
+            isAuth: false
+
+        });
+    }
 });
 
 export default router;
