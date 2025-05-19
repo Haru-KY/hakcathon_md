@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Automatic massage summarization and classification AI</title>
-    <link rel="stylesheet" href="C:\ハッカソン\amsac\public\stylesheets\home_styles.css">
+    <link rel="stylesheet" href="/amsac/public/stylesheets/home_style.css">
     <style>
     /* ログインボタンのUI:style.cssでの実行ができなかったためこちらに移動 */
     .top-right-btn {
@@ -23,7 +23,11 @@
     </style>
 </head>
 <body>
-    <button class="top-right-btn">ログイン</button>
+    <form action="/login" method="POST">
+    
+        <button class="top-right-btn" name="login" value="login">ログイン</button>
+
+    </form>
     <header>
         <h1>Amsac AI</h1>
     </header>

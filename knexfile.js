@@ -17,8 +17,8 @@ const config = {
     },
     pool: {
 
-      min: 2,
-      max: 1,
+      min: 1,
+      max: 2,
 
     },
 
