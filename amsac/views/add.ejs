@@ -61,72 +61,28 @@
 
     <main>
         <section class="centered">
-            <h2>今日のやることリスト</h2>
-            <p class="todo-description">今日中に終わらせたいタスクをまとめたリスト
-                <button class="fav-btn" name="like">★</button>
-            </p>
-            <ul class="todo-list">
-                <li>
-                    メールを確認する<br>
-                    プロジェクトの進捗を確認する<br>
-                    ミーティングの準備をする<br>
-                    買い物に行く<br>
-                    日記を書く<br>
-                </li>
-            </ul>
-            <p class="todo-description">今日中に終わらせたいタスクをまとめたリスト
-                <button class="fav-btn" name="like">★</button>
-            </p>
-            <ul class="todo-list">
-                <li>
-                    メールを確認する<br>
-                    プロジェクトの進捗を確認する<br>
-                    ミーティングの準備をする<br>
-                    買い物に行く<br>
-                    日記を書く<br>
-                </li>
-            </ul>
-            <p class="todo-description">今日中に終わらせたいタスクをまとめたリスト
-                <button class="fav-btn" name="like">★</button>
-            </p>
-            <ul class="todo-list">
-                <li>
-                    メールを確認する<br>
-                    プロジェクトの進捗を確認する<br>
-                    ミーティングの準備をする<br>
-                    買い物に行く<br>
-                    日記を書く<br>
-                </li>
-            </ul>
-            <p class="todo-description">今日中に終わらせたいタスクをまとめたリスト
-                <button class="fav-btn" name="like">★</button>
-            </p>
-            <ul class="todo-list">
-                <li>
-                    メールを確認する<br>
-                    プロジェクトの進捗を確認する<br>
-                    ミーティングの準備をする<br>
-                    買い物に行く<br>
-                    日記を書く<br>
-                </li>
-            </ul>
-            <p class="todo-description">今日中に終わらせたいタスクをまとめたリスト
-                <button class="fav-btn" name="like">★</button>
-            </p>
-            <ul class="todo-list">
-                <li>
-                    メールを確認する<br>
-                    プロジェクトの進捗を確認する<br>
-                    ミーティングの準備をする<br>
-                    買い物に行く<br>
-                    日記を書く<br>
-                </li>
-            </ul>
+            <h2>メール一覧</h2>
+
+            <% if (emails && emails.length > 0) { %>
+                <% emails.forEach(function(email) { %>
+                <p class="todo-description">
+                    <%= email.subject %>
+                    <button class="fav-btn" name="like">★</button>
+                </p>
+                <ul class="todo-list">
+                    <li>
+                    <%= email.body.replace(/\n/g, "<br>") %>
+                    </li>
+                </ul>
+                <% }); %>
+            <% } else { %>
+                <p>表示するメールがありません。</p>
+            <% } %>
+
             <div class="page-btn">
                 <button id="back-btn" class="nextback-btn" name="next">back</button>
                 <button id="next-btn" class="nextback-btn" name="back">next</button>
             </div>
-
         </section>
     </main>
 

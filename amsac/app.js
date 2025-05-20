@@ -11,7 +11,6 @@ import { fileURLToPath } from 'url';
 
 import indexRouter from './routes/index.js';
 import homeRouter from './routes/home.js';
-import usersRouter from './routes/users.js';
 import loginRouter from './routes/login.js';
 import regiRouter from './routes/register.js';
 import addRouter from './routes/add.js';
@@ -40,7 +39,6 @@ app.use(session({
 }));
 
 app.use('/', homeRouter);
-app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', regiRouter);
 app.use('/add', addRouter);
