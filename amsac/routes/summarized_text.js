@@ -1,24 +1,128 @@
 import express from 'express';
+import session from 'express-session';
+import dotenv from 'dotenv';
+import fs from 'fs/promises';
 import { google } from 'googleapis';
 import { Ollama } from 'ollama';
 import { PromptTemplate } from '@langchain/core/prompts';
 import mysql from 'mysql2/promise';
 
-const router = express.Router();
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 const ollama = new Ollama();
 
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+// セッション設定（ユーザーのログイン状態などを管理）
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+// Google OAuth2クライアントの設定
 const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
   process.env.REDIRECT_URI
 );
 
-// HTMLタグ除去
-function stripHtmlTags(html) {
-  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+// Ollamaのプロンプトテンプレート：メール本文を簡潔に要約
+const summaryPrompt = PromptTemplate.fromTemplate(
+  "次のメール本文を日本語で簡潔に要約してください：\n\n{emailBody}"
+);
+
+// Ollamaのプロンプトテンプレート：タグ一覧からメール本文に該当するタグを列挙
+const tagPromptTemplate = PromptTemplate.fromTemplate(
+  "以下のタグの中から、このメール本文に該当するものをすべてカンマ区切りで列挙してください。\n\nタグ一覧: {tags}\n\nメール本文:\n{emailBody}"
+);
+
+// Google OAuth認証のURLを生成し、リダイレクトするルート
+app.get('/auth/google', (req, res) => {
+  const url = oauth2Client.generateAuthUrl({
+    access_type: 'offline',  // リフレッシュトークンを取得
+    scope: ['https://www.googleapis.com/auth/gmail.readonly'], // Gmail読み取り権限
+  });
+  res.redirect(url);
+});
+
+// OAuth2のコールバック処理：認証コードからアクセストークンを取得しセッションに保存
+app.get('/oauth2callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.redirect('/');
+  try {
+    const { tokens } = await oauth2Client.getToken(code);
+    req.session.tokens = tokens;  // トークンをセッションに保存
+    res.redirect('/');
+  } catch {
+    res.redirect('/');
+  }
+});
+
+// DBからタグ一覧を取得する関数
+async function fetchTagsFromDB() {
+  const conn = await pool.getConnection();
+  try {
+    const [rows] = await conn.query('SELECT id, name FROM tags');
+    return rows;
+  } finally {
+    conn.release();
+  }
 }
 
-// メール本文抽出
+// メール情報をDBのemailsテーブルに保存（更新または挿入）
+async function saveEmailToDB(email) {
+  const conn = await pool.getConnection();
+  try {
+    // 既に同じmessage_idのメールがあるか確認
+    const [exists] = await conn.query('SELECT id FROM emails WHERE message_id = ?', [email.message_id]);
+    if (exists.length > 0) {
+      // 既存メールを更新
+      await conn.query(
+        `UPDATE emails SET subject=?, body=?, summary=?, time=? WHERE message_id=?`,
+        [email.subject, email.body, email.summary, email.time, email.message_id]
+      );
+      return exists[0].id;
+    } else {
+      // 新規メールを挿入
+      const [result] = await conn.query(
+        `INSERT INTO emails (message_id, subject, body, summary, time) VALUES (?, ?, ?, ?, ?)`,
+        [email.message_id, email.subject, email.body, email.summary, email.time]
+      );
+      return result.insertId;
+    }
+  } finally {
+    conn.release();
+  }
+}
+
+// emailsテーブルとtagsテーブルの関連付けを管理するemail_tagsテーブルにタグ情報を保存
+async function saveEmailTags(emailId, tagIds) {
+  if (tagIds.length === 0) return;
+  const conn = await pool.getConnection();
+  try {
+    // 既存のタグ関連を削除
+    await conn.query('DELETE FROM email_tags WHERE email_id = ?', [emailId]);
+    // 新たに関連付けを挿入
+    const values = tagIds.map(tagId => [emailId, tagId]);
+    await conn.query('INSERT INTO email_tags (email_id, tag_id) VALUES ?', [values]);
+  } finally {
+    conn.release();
+  }
+}
+
+// Gmailのメール本文ペイロードからテキスト本文を抽出する関数
 function extractBody(payload) {
   if (payload.mimeType === 'text/plain' && payload.body?.data) {
     return Buffer.from(payload.body.data, 'base64').toString('utf-8');
@@ -39,120 +143,186 @@ function extractBody(payload) {
   return '(本文なし)';
 }
 
-// 要約プロンプト
-const summaryPrompt = new PromptTemplate({
-  template: '次のメール本文を日本語で簡潔に要約してください：\n\n{email}',
-  inputVariables: ['email'],
-});
-
-// cosine類似度計算
-function cosineSimilarity(a, b) {
-  const wordFreq = (text) =>
-    text.split(/\s+/).reduce((acc, word) => {
-      acc[word] = (acc[word] || 0) + 1;
-      return acc;
-    }, {});
-  const dot = (vecA, vecB) =>
-    Object.keys(vecA).reduce((sum, key) => sum + (vecA[key] * (vecB[key] || 0)), 0);
-  const magnitude = (vec) =>
-    Math.sqrt(Object.values(vec).reduce((sum, val) => sum + val * val, 0));
-
-  const vecA = wordFreq(a);
-  const vecB = wordFreq(b);
-  return dot(vecA, vecB) / (magnitude(vecA) * magnitude(vecB) || 1);
+// HTMLタグを除去してテキストだけを抽出するユーティリティ関数
+function stripHtmlTags(html) {
+  return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 }
 
-// データベースから人工タグ名だけ取得（tag.name）
-// tag.id はこの時点では使っていないが、後でDB挿入時に使える
-async function getTagsFromDB() {
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
-  });
+// メール要約・タグ分類APIエンドポイント
+app.get('/api/summary', async function (req, res)  {
+  // 認証されていなければ401を返す
+  if (!req.session.tokens) return res.status(401).json({ error: 'Unauthorized' });
 
-  const [rows] = await connection.execute('SELECT name FROM tags');
-  await connection.end();
-  return rows.map(row => row.name); // → tag.name として使う
-}
-
-// メール要約・タグ分類ルート
-router.get('/summary', async (req, res) => {
-  if (!req.session.tokens) return res.redirect('/');
+  let page = parseInt(req.query.page) || 1;
+  const pageSize = 5;
 
   try {
+    // Gmail APIクライアントに認証情報セット
     oauth2Client.setCredentials(req.session.tokens);
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
 
-    const tagNames = await getTagsFromDB();
-    const threadList = await gmail.users.threads.list({ userId: 'me', maxResults: 5 });
-    const threads = threadList.data.threads || [];
+    // DBからタグ一覧取得
+    const dbTags = await fetchTagsFromDB();
+    const tagNameToId = {};
+    dbTags.forEach(t => { tagNameToId[t.name] = t.id; });
+    const tagNames = dbTags.map(t => t.name);
 
-    const summaries = await Promise.all(threads.map(async (thread) => {
-      try {
-        const detail = await gmail.users.threads.get({ userId: 'me', id: thread.id });
-        const msg = detail.data.messages[0];
-
-        const subject = msg.payload.headers.find(h => h.name === 'Subject')?.value || '(件名なし)'; // → タイトル（subject）
-        const from = msg.payload.headers.find(h => h.name === 'From')?.value || '(差出人不明)';
-        const date = msg.payload.headers.find(h => h.name === 'Date')?.value || '(日付不明)';
-        const body = extractBody(msg.payload); // → 原文（body）
-        const messageId = msg.id; // → Gmail ID（messageId）
-
-        // 要約生成
-        const prompt = await summaryPrompt.format({ email: body });
-        const response = await ollama.chat({
-          model: 'gemma3:1b',
-          messages: [{ role: 'user', content: prompt }]
+    // 初回またはページ1の時にスレッドIDをまとめて取得してセッションに保持
+    if (!req.session.threadIds || req.query.page === '1') {
+      const allThreads = [];
+      let nextPageToken = null;
+      do {
+        const response = await gmail.users.threads.list({
+          userId: 'me',
+          maxResults: 100,
+          pageToken: nextPageToken,
         });
-        const summary = response.message?.content || '(要約取得失敗)'; // → 要約文（summary）
+        if (response.data.threads) allThreads.push(...response.data.threads);
+        nextPageToken = response.data.nextPageToken;
+      } while (nextPageToken && allThreads.length < 100);
+      req.session.threadIds = allThreads.map(t => t.id);
+    }
 
-        // cosine類似度でタグ分類（tag.nameとの比較）
-        const threshold = 0.3;
-        const matchedTags = tagNames.filter(tag =>
-          cosineSimilarity(body, tag) >= threshold
+    // DBに保存済みのメール総数を取得し、ページングの総ページ数計算
+    const conn = await pool.getConnection();
+    const [[{ total }]] = await conn.query('SELECT COUNT(*) as total FROM emails');
+    conn.release();
+
+    const totalPages = Math.ceil(total / pageSize);
+    if (page < 1) page = 1;
+    if (page > totalPages) page = totalPages;
+
+    // ページが前ページより小さい（戻る操作）場合はDBから取得して返す（DB参照）
+    if (page < (req.session.lastPage || 1)) {
+      const conn = await pool.getConnection();
+      try {
+        const offset = (page - 1) * pageSize;
+        // DBからメールデータ取得
+        const [emails] = await conn.query(
+          `SELECT e.id, e.message_id, e.subject, e.body, e.summary, e.time
+           FROM emails e
+           ORDER BY e.time DESC
+           LIMIT ? OFFSET ?`,
+          [pageSize, offset]
         );
+        const emailIds = emails.map(e => e.id);
 
-        // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-        // ここで得られた情報をDBに保存すればよい
-        // 保存すべき情報の対応関係：
-        // - Gmail message ID → messageId
-        // - タイトル → subject
-        // - 原文 → body
-        // - 要約文 → summary
-        // - 一致したタグ名リスト → matchedTags（ここからtag.idを検索して使用する）
-        // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+        // 取得したメールIDに対応するタグも取得
+        let emailTagsMap = {};
+        if (emailIds.length > 0) {
+          const [emailTags] = await conn.query(
+            `SELECT et.email_id, t.name FROM email_tags et
+             JOIN tags t ON et.tag_id = t.id
+             WHERE et.email_id IN (?)`,
+            [emailIds]
+          );
+          emailTagsMap = emailTags.reduce((acc, cur) => {
+            if (!acc[cur.email_id]) acc[cur.email_id] = [];
+            acc[cur.email_id].push(cur.name);
+            return acc;
+          }, {});
+        }
 
-        return {
-          messageId, // Gmail ID
-          subject,   // タイトル
-          from,
-          date,
-          original: body, // 原文
-          summary,        // 要約文
-          tags: matchedTags // タグ名（tag.name）リスト
-        };
+        const results = emails.map(email => ({
+          message_id: email.message_id,
+          subject: email.subject,
+          body: email.body,
+          summary: email.summary,
+          time: email.time,
+          tags: emailTagsMap[email.id] || [],
+        }));
 
-      } catch (err) {
-        console.error(`スレッド ${thread.id} の処理中にエラー:`, err);
-        return {
-          subject: '(エラー発生)',
-          from: '',
-          date: '',
-          summary: '(要約取得失敗)',
-          original: '',
-          tags: []
-        };
+        req.session.lastPage = page;
+
+        return res.json({
+          results,
+          page,
+          hasNext: page < totalPages,
+          hasPrev: page > 1,
+          source: 'db',
+        });
+      } finally {
+        conn.release();
       }
-    }));
+    }
 
-    res.json(summaries); // ← ★ 今はJSONで返しているが、ここでDB保存してもよい
+    // 新しいページならGmail APIから取得して要約・タグ付けし、DBに保存（Gmail参照）
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const threadPage = req.session.threadIds.slice(start, end);
 
+    if (threadPage.length === 0) {
+      return res.json({ results: [], message: 'メールはこれ以上ありません' });
+    }
+
+    const results = [];
+
+    // Gmailスレッドごとに処理
+    for (const threadId of threadPage) {
+      const detail = await gmail.users.threads.get({ userId: 'me', id: threadId });
+      const messages = detail.data.messages || [];
+      if (messages.length === 0) continue;
+
+      const message = messages[0];
+      const messageId = message.id;
+      const payload = message.payload || {};
+      const headers = payload.headers || [];
+
+      const subjectHeader = headers.find(h => h.name.toLowerCase() === 'subject');
+      const dateHeader = headers.find(h => h.name.toLowerCase() === 'date');
+
+      const subject = subjectHeader ? subjectHeader.value : '(件名なし)';
+      const time = dateHeader ? new Date(dateHeader.value).toISOString() : new Date().toISOString();
+
+      // 本文抽出
+      const body = extractBody(payload);
+
+      // Ollamaでメール本文を要約
+      const summary = await ollama.chat({
+        model: 'gemma3:1b',
+        messages: [{ role: 'user', content: summaryPrompt.format({ emailBody: body }) }],
+      }).then(r => r.choices[0].message.content).catch(() => '(要約失敗)');
+
+      // Ollamaでタグを判定
+      const tagContent = await ollama.chat({
+        model: 'gemma3:4b',
+        messages: [{ role: 'user', content: tagPromptTemplate.format({ tags: tagNames.join(', '), emailBody: body }) }],
+      }).then(r => r.choices[0].message.content).catch(() => '');
+      const matchedTags = tagContent.split(',').map(t => t.trim()).filter(t => tagNameToId[t]);
+
+      // DB保存
+      const emailRecord = {
+        message_id: messageId,
+        subject,
+        body,
+        summary,
+        time,
+      };
+      const emailId = await saveEmailToDB(emailRecord);
+      await saveEmailTags(emailId, matchedTags.map(t => tagNameToId[t]));
+
+      results.push({
+        ...emailRecord,
+        tags: matchedTags,
+      });
+    }
+
+    req.session.lastPage = page;
+
+    // 要約結果をJSONファイルに保存
+    await fs.writeFile('emails_summary.json', JSON.stringify(results, null, 2), 'utf-8');
+
+    res.json({
+      results,
+      page,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+      source: 'gmail',
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).send('メール取得・要約・分類処理でエラーが発生しました。');
+    res.status(500).json({ error: '内部サーバーエラー' });
   }
 });
 
-export default router;
+
