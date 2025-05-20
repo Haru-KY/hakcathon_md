@@ -3,8 +3,7 @@ import express from 'express';
 const router = express.Router();
 import bcrypt from 'bcrypt';
 
-import knex from "../db/users.js";
-
+import knex from "../db/db.js";
 router.get('/', function (req, res, next) {
   res.render('register', {
     title: 'Sign up',
