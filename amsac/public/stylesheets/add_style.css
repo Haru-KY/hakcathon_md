@@ -10,6 +10,10 @@ header {
     z-index: 1000;
 }
 
+body{
+    background-color: #a5c1aa;
+}
+
 
 .btn{
     width: 50px;
@@ -44,7 +48,7 @@ header {
 #menu{
     width: 20%;
     height: 100vh;
-    background-color: rgb(204, 204, 158);
+    background-color: #f6d6c1;
     z-index: 999;
     position: fixed;
     top: 0;
@@ -66,6 +70,7 @@ header {
     margin: 0;
     display: flex;
     flex-direction: column;
+    color: #434b54;
     gap: 20px;
     padding-left: 30px;
 }
@@ -78,7 +83,7 @@ header {
 
 #menu ul li a {
     text-decoration: none;
-    color: #333;
+    color: #434b54;
     font-weight: 600;
     letter-spacing: 1px;
     transition: color 0.3s ease;
@@ -115,6 +120,7 @@ header {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease;
+    will-change: max-height;
 }
 
 /* 表示時に使うクラス */

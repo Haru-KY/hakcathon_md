@@ -3,16 +3,13 @@ document.querySelector('.btn').addEventListener('click', function () {
 });
 
 document.querySelectorAll('.fav-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         btn.classList.toggle('active');
     });
 });
-document.querySelectorAll('.fav-btn').forEach(function (btn) {
-    btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    });
-});
 
+//todoの複数同時表示　可
 document.querySelectorAll('.todo-description').forEach(function (desc, index) {
     desc.addEventListener('click', function () {
         const todoLists = document.querySelectorAll('.todo-list');
@@ -21,6 +18,18 @@ document.querySelectorAll('.todo-description').forEach(function (desc, index) {
 
     });
 });
+
+//todoの複数同時表示　不可(他タブは閉じる)
+// document.querySelectorAll('.todo-description').forEach(function (desc, index) {
+//     desc.addEventListener('click', function () {
+//         const todoLists = document.querySelectorAll('.todo-list');
+//         todoLists.forEach((list, i) => {
+//             if (i !== index) list.classList.remove('show');
+//         });
+
+//         todoLists[index].classList.toggle('show');
+//     });
+// });
 
 document.querySelector('.tag-btn').addEventListener('click', function () {
     document.querySelector('.tag-list').classList.toggle('show');
