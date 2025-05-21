@@ -6,21 +6,17 @@
 
 const config = {
 
-  users: {
+  client: 'mysql2',
+  connection: {
+    database: "amsac",
+    user: "root",
+    password: "mdmdMDMD",
 
-    client: 'mysql2',
-    connection: {
-      database: "amsac",
-      user: "root",
-      password: "mdmdMDMD",
+  },
+  pool: {
 
-    },
-    pool: {
-
-      min: 1,
-      max: 2,
-
-    },
+    min: 1,
+    max: 2,
 
   },
 

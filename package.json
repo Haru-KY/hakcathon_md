@@ -1,6 +1,7 @@
 {
   "name": "hackson",
   "version": "1.0.0",
+  "type": "module",
   "main": "knexfile.js",
   "dependencies": {
     "abort-controller": "^3.0.0",
