@@ -64,8 +64,8 @@
                         <% } %>
                     </ul>
                 </li>
-                <form action="" >
-                <li name="favorite"><a href="/"></a>FAVORITE</li>
+                <form action="/" >
+                    <li name="favorite"><a href="/add?aitag=<%= encodeURIComponent(emails.is_favorite) %>"></a>FAVORITE</li>
                 </form>
                 <form action="/login" >
                 <li name="logout"><a href="/login">LOGOUT</a></li>
@@ -85,7 +85,7 @@
                 <% emails.forEach(function(email) { %>
                 <p class="todo-description">
                     <%= email.subject %>
-                    <button class="fav-btn" name="like">★</button>
+                    <button class="fav-btn <%= email.is_favorite ? 'active' : '' %>" name="like" data-id="<%= email.id %>">★</button>
                 </p>
                 <ul class="todo-list">
                     <li>
@@ -129,9 +129,9 @@
         </div>
     </section>
     </main> -->
-
-
+    <script src="/javascripts/favoritebutton.js"></script>
     <script src="/javascripts/add_pagemove.js"></script>
+
 </body>
 
 </html>
