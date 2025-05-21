@@ -24,35 +24,45 @@
                 <form action="/" >
                     <li name="hp"><a href="/">HOME</a></li>
                 </form>
+
+                <form action="/" >
+                    <li name="show_all"><a href="/add">Show All Mails</a></li>
+                </form>
+
                 <li class="tag-btn">
                     <div class="tag-label">
                         <a href="#">TAG</a>
                         <div class="open-close"><span></span><span></span></div>
                     </div>
-                    <% if (tags && tags.length > 0) { %>
-                        <% tags.forEach(function(tag) { %>
-                        <p class="tags">
-                            <%= tag.name %>
-                        </p>
-                    <% }); %>
-                    <% } else { %>
-                        <p>表示するtagがありません。</p>
-                    <% } %>
+                    <ul class="tag-list">
+                        <% if (tags && tags.length > 0) { %>
+                            <% tags.forEach(function(tag) { %>
+                                <li>
+                                    <a href="/add?tag=<%= encodeURIComponent(tag.name) %>"><%= tag.name %></a>
+                                </li>
+                            <% }); %>
+                        <% } else { %>
+                            <li><p>表示するtagがありません。</p></li>
+                        <% } %>
+                    </ul>
                 </li>
+
                 <li class="tag-btn-ai">
                     <div class="tag-label-ai">
                         <a href="#">AI-TAG</a>
                         <div class="open-close-ai"><span></span><span></span></div>
                     </div>
-                    <% if (ai_tags && ai_tags.length > 0) { %>
-                        <% ai_tags.forEach(function(ai_tag) { %>
-                        <p class="ai_tags">
-                            <%= ai_tag.name %>
-                        </p>
-                    <% }); %>
-                    <% } else { %>
-                        <p>表示するAI tagがありません。</p>
-                    <% } %>
+                    <ul class="tag-list-ai">
+                        <% if (ai_tags && ai_tags.length > 0) { %>
+                            <% ai_tags.forEach(function(ai_tag) { %>
+                                <li>
+                                    <a href="/add?aitag=<%= encodeURIComponent(ai_tag.name) %>"><%= ai_tag.name %></a>
+                                </li>
+                            <% }); %>
+                        <% } else { %>
+                            <li><p>表示するAI tagがありません。</p></li>
+                        <% } %>
+                    </ul>
                 </li>
                 <form action="" >
                 <li name="favorite"><a href="/"></a>FAVORITE</li>
