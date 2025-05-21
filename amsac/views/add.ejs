@@ -29,22 +29,30 @@
                         <a href="#">TAG</a>
                         <div class="open-close"><span></span><span></span></div>
                     </div>
-                    <ul class="tag-list">
-                        <li><a href="#">Tag 1</a></li>
-                        <li><a href="#">Tag 2</a></li>
-                        <li><a href="#">Tag 3</a></li>
-                    </ul>
+                    <% if (tags && tags.length > 0) { %>
+                        <% tags.forEach(function(tag) { %>
+                        <p class="tags">
+                            <%= tag.name %>
+                        </p>
+                    <% }); %>
+                    <% } else { %>
+                        <p>表示するtagがありません。</p>
+                    <% } %>
                 </li>
                 <li class="tag-btn-ai">
                     <div class="tag-label-ai">
                         <a href="#">AI-TAG</a>
                         <div class="open-close-ai"><span></span><span></span></div>
                     </div>
-                    <ul class="tag-list-ai">
-                        <li><a href="#">Tag 1</a></li>
-                        <li><a href="#">Tag 2</a></li>
-                        <li><a href="#">Tag 3</a></li>
-                    </ul>
+                    <% if (ai_tags && ai_tags.length > 0) { %>
+                        <% ai_tags.forEach(function(ai_tag) { %>
+                        <p class="ai_tags">
+                            <%= ai_tag.name %>
+                        </p>
+                    <% }); %>
+                    <% } else { %>
+                        <p>表示するAI tagがありません。</p>
+                    <% } %>
                 </li>
                 <form action="" >
                 <li name="favorite"><a href="/"></a>FAVORITE</li>
