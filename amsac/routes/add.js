@@ -22,9 +22,19 @@ router.get( '/', async function ( req, res, next) {
             .orderBy("created_at", "desc")
             .limit(10);
 
+        const tags = await knex( "tags" )
+            .select("id", "user_id", "name")
+            .where("user_id", userId)
+
+        const ai_tags = await knex( "ai_tags" )
+            .select("id", "user_id", "name")
+            .where("user_id", userId)
+
         res.render("add", {
             title: "Main page",
-            emails: emails
+            emails: emails,
+            tags: tags,
+            ai_tags: ai_tags
         });
     } catch (err) {
 
