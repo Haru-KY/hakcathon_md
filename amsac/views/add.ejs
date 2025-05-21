@@ -78,7 +78,6 @@
             <% } else { %>
                 <p>表示するメールがありません。</p>
             <% } %>
-
             <div class="page-btn">
                 <button id="back-btn" class="nextback-btn" name="next">back</button>
                 <button id="next-btn" class="nextback-btn" name="back">next</button>
@@ -86,6 +85,32 @@
         </section>
     </main>
 
+    <!-- メール要約機能完成後こちらで実装 -->
+    <!-- <main>
+    <section class="centered">
+        <h2>今日のやることリスト</h2>
+
+        <% emails.forEach(function(email, index) { %>
+        <p class="todo-description">
+            <%= email.subject %>
+            <button class="fav-btn" name="like">★</button>
+        </p>
+        <div class="summary">
+            <p><%= email.summary %></p>
+            <button class="toggle-original">原文を見る</button>
+        </div>
+        <div class="original" style="display: none;">
+            <p><%= email.original %></p>
+            <button class="toggle-summary">要約に戻す</button>
+        </div>
+        <% }) %>
+
+        <div class="page-btn">
+        <button id="back-btn" class="nextback-btn" name="next">back</button>
+        <button id="next-btn" class="nextback-btn" name="back">next</button>
+        </div>
+    </section>
+    </main> -->
 
 
     <script src="/javascripts/add_pagemove.js"></script>

@@ -106,3 +106,19 @@ document.getElementById('ai-submit').addEventListener('click', function () {
     }
 });
 
+//原文表示切り替え
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('toggle-original')) {
+        const summary = e.target.closest('.summary');
+        const original = summary.nextElementSibling;
+        summary.style.display = 'none';
+        original.style.display = 'block';
+    }
+
+    if (e.target.classList.contains('toggle-summary')) {
+        const original = e.target.closest('.original');
+        const summary = original.previousElementSibling;
+        original.style.display = 'none';
+        summary.style.display = 'block';
+    }
+});

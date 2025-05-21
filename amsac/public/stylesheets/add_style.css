@@ -319,3 +319,23 @@ body{
     gap: 100px;           
 }
 
+.summary, .original {
+    padding: 10px;
+    background-color: #f4f8f4;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.toggle-original, .toggle-summary {
+    margin-top: 10px;
+    padding: 4px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: #ccc;
+    border: none;
+    border-radius: 4px;
+}
+
+.toggle-original:hover, .toggle-summary:hover {
+    background-color: #bbb;
+}
