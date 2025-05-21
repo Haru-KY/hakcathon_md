@@ -19,7 +19,7 @@ router.get( '/', async function ( req, res, next) {
         const aiTagName = req.query.aitag;
 
         let emailsQuery = knex("email")
-            .select("id", "subject", "body")
+            .select("id", "subject", "is_favorite", "body")
             .where("user_id", userId)
 
         if (tagName && tagName.trim() !== ""){

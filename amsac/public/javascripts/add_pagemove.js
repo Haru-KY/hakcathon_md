@@ -2,12 +2,12 @@ document.querySelector('.btn').addEventListener('click', function () {
     document.getElementById('menu').classList.toggle('close');
 });
 
-document.querySelectorAll('.fav-btn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        btn.classList.toggle('active');
-    });
-});
+// document.querySelectorAll('.fav-btn').forEach(function (btn) {
+//     btn.addEventListener('click', function (e) {
+//         e.stopPropagation();
+//         btn.classList.toggle('active');
+//     });
+// });
 
 //todoの複数同時表示　可
 document.querySelectorAll('.todo-description').forEach(function (desc, index) {
