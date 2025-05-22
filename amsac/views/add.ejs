@@ -83,17 +83,23 @@
 
             <% if (emails && emails.length > 0) { %>
                 <% emails.forEach(function(email) { %>
+                <div class="email-block">
                     <p class="todo-description">
-                        <%= email.subject %>
-                        <button class="fav-btn <%= email.is_favorite ? 'active' : '' %>" name="like" data-id="<%= email.id %>">★</button>
+                    <%= email.subject %>
+                    <button class="fav-btn <%= email.is_favorite ? 'active' : '' %>" name="like" data-id="<%= email.id %>">★</button>
                     </p>
-                    <!-- 要約文と原文リンク -->
+                    <div class="summary-list">
                     <div class="summary">
                         <p><%= email.summary %></p>
+                        <li>
+                            <%= email.body.replace(/\n/g, "<br>") %>
+                        </li>
                         <form action="/mail/<%= email.id %>" method="get">
-                            <button type="submit">原文を表示</button>
+                        <button type="submit">原文を表示</button>
                         </form>
                     </div>
+                    </div>
+                </div>
                 <% }); %>
             <% } else { %>
                 <p>表示するメールがありません。</p>
