@@ -17,6 +17,7 @@ router.get( '/', async function ( req, res, next) {
 
         const tagName = req.query.tag;
         const aiTagName = req.query.aitag;
+        const favorite = req.query.favorite;
 
         let emailsQuery = knex("email")
             .select("id", "subject", "is_favorite", "body")
@@ -84,6 +85,14 @@ router.get( '/', async function ( req, res, next) {
             }
 
         }
+
+        if (req.query.favorite === "true") 
+        {
+            
+            emailsQuery.where("is_favorite", true);
+        
+        }
+
 
         emailsQuery = emailsQuery.orderBy( "created_at", "desc" );
 
