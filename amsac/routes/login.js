@@ -67,8 +67,8 @@ router.post("/", async function (req, res, next){
 
         // });
 
-        return res.redirect("/add");
-        // return res.redirect("/gmailOAuth");
+        // return res.redirect("/add");
+        return res.redirect("/oauth2callback/auth/google");
     } catch (err) {
         console.error(err);
         res.render("login", {

@@ -51,35 +51,44 @@ document.querySelector('.tag-list').addEventListener('click', (e) => {
     e.stopPropagation();
 });
 
+// document.addEventListener("DOMContentLoaded", function () {
+//     const form = document.querySelector('form');
+//     const input = document.getElementById('tag-add');
+//     const tagList = document.querySelector('.tag-list');
+
+//     form.addEventListener('submit', function (event) {
+//         event.preventDefault();
+//         const value = input.value.trim();
+
+//         if (value !== "") {
+//             const li = document.createElement('li');
+//             const a = document.createElement('a');
+//             a.href = "#";
+//             a.textContent = value;
+
+//             const deleteBtn = document.createElement('button');
+//             deleteBtn.textContent = "✖";
+//             deleteBtn.className = "delete-btn";
+//             deleteBtn.style.marginLeft = "8px";
+//             deleteBtn.addEventListener('click', function () {
+//                 li.remove();
+//             });
+
+//             li.appendChild(a);
+//             li.appendChild(deleteBtn);
+//             tagList.appendChild(li);
+
+//             input.value = "";
+//         }
+//     });
+// });
+
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector('form');
-    const input = document.getElementById('tag-add');
-    const tagList = document.querySelector('.tag-list');
-
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const value = input.value.trim();
-
-        if (value !== "") {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = "#";
-            a.textContent = value;
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = "✖";
-            deleteBtn.className = "delete-btn";
-            deleteBtn.style.marginLeft = "8px";
-            deleteBtn.addEventListener('click', function () {
-                li.remove();
-            });
-
-            li.appendChild(a);
-            li.appendChild(deleteBtn);
-            tagList.appendChild(li);
-
-            input.value = "";
-        }
+    const inputs = document.querySelectorAll('#utag, #aitag');
+    inputs.forEach(input => {
+        input.addEventListener("input", () => {
+            console.log(`入力中: ${input.value}`);
+        });
     });
 });
 
@@ -91,32 +100,32 @@ document.querySelector('.tag-list-ai').addEventListener('click', (e) => {
     e.stopPropagation();
 });
 
-document.getElementById('ai-submit').addEventListener('click', function () {
-    const input = document.getElementById('tag-add');
-    const value = input.value.trim();
-    const tagListAI = document.querySelector('.tag-list-ai');
+// document.getElementById('ai-submit').addEventListener('click', function () {
+//     const input = document.getElementById('tag-add');
+//     const value = input.value.trim();
+//     const tagListAI = document.querySelector('.tag-list-ai');
 
-    if (value !== "") {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = "#";
-        a.textContent = value;
+//     if (value !== "") {
+//         const li = document.createElement('li');
+//         const a = document.createElement('a');
+//         a.href = "#";
+//         a.textContent = value;
 
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = "✖";
-        deleteBtn.className = "delete-btn";
-        deleteBtn.style.marginLeft = "8px";
-        deleteBtn.addEventListener('click', function () {
-            li.remove();
-        });
+//         const deleteBtn = document.createElement('button');
+//         deleteBtn.textContent = "✖";
+//         deleteBtn.className = "delete-btn";
+//         deleteBtn.style.marginLeft = "8px";
+//         deleteBtn.addEventListener('click', function () {
+//             li.remove();
+//         });
 
-        li.appendChild(a);
-        li.appendChild(deleteBtn);
-        tagListAI.appendChild(li);
+//         li.appendChild(a);
+//         li.appendChild(deleteBtn);
+//         tagListAI.appendChild(li);
 
-        input.value = "";
-    }
-});
+//         input.value = "";
+//     }
+// });
 
 //原文表示切り替え
 document.addEventListener('click', function (e) {
