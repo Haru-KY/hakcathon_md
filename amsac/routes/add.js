@@ -20,7 +20,7 @@ router.get( '/', async function ( req, res, next) {
         const favorite = req.query.favorite;
 
         let emailsQuery = knex("email")
-            .select("id", "subject", "is_favorite", "body")
+            .select("id", "subject", "is_favorite", "body", "summary")
             .where("user_id", userId)
 
         if (tagName && tagName.trim() !== ""){

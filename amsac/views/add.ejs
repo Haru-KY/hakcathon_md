@@ -91,9 +91,9 @@
                     <div class="summary-list">
                     <div class="summary">
                         <p><%= email.summary %></p>
-                        <li>
-                            <%= email.body.replace(/\n/g, "<br>") %>
-                        </li>
+                        <!-- <li>
+                            <%= email.summary.replace(/\n/g, "<br>") %>
+                        </li> -->
                         <form action="/mail/<%= email.id %>" method="get">
                         <button type="submit">原文を表示</button>
                         </form>
