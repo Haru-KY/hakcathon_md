@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title><%= email.subject %> | 原文</title>
+</head>
+<body>
+    <main>
+        <h2><%= email.subject %></h2>
+        <p><%= email.original.replace(/\n/g, "<br>") %></p>
+        <a href="/add">← メール一覧に戻る</a>
+    </main>
+</body>
+</html>
