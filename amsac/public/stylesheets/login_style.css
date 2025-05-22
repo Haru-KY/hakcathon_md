@@ -1,19 +1,47 @@
 body {
   font-family: sans-serif;
-  background-color: #f0f0f0;
+  background-color: #6b4c3b;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
+  padding: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 900px;
+  width: 100%;
+  background-color: #a5c1aa;
+  color: #4b3e3e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.left-side {
+  flex: 1 1 300px;
+  background-color: #6b4c3b;
+  color: white;
+  padding: 2rem;
+}
+
+.left-side h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.subheading {
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .login-container {
-  background: #fff;
+  flex: 1 1 300px;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  background-color: #a5c1aa;
 }
 
 h2 {
@@ -31,7 +59,7 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 0.5rem;
-  margin-top: 0.25rem;
+  margin: 0.5rem 0 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -40,15 +68,15 @@ button {
   width: 100%;
   margin-top: 1rem;
   padding: 0.5rem;
-  background-color: #4285F4;
-  color: white;
+  background-color: #f6d6c1;
+  color: #4b3e3e;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #3367d6;
+  background-color: #eec7b4;
 }
 
 .error {
@@ -57,10 +85,27 @@ button:hover {
   text-align: center;
 }
 
-.navigation-buttons {
+/* 登録ボタン強調 */
+/* .navigation-buttons {
   margin-top: 1.5rem;
 }
 
 .navigation-buttons form {
   margin-top: 0.5rem;
+} */
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-side,
+  .login-container {
+    flex: 1 1 100%;
+  }
+
+  .left-side {
+    text-align: center;
+  }
 }

@@ -1,46 +1,58 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ユーザー登録</title>
   <link rel="stylesheet" href="/stylesheets/register_style.css">
 </head>
+
 <body>
+  <div class="container">
+    <div class="left-side">
+      <h1>Amsac AI</h1>
+      <p class="subheading">Automatic message summarization and classification by AI</p>
+    </div>
+    <div class="register-container">
+      <h2>ユーザー登録</h2>
 
-  <div class="register-container">
-    <h2>ユーザー登録</h2>
+      <% if (error) { %>
+        <div class="error">
+          <%= error %>
+        </div>
+        <% } %>
 
-    <% if (error) { %>
-      <div class="error"><%= error %></div>
-    <% } %>
+          <form action="/register" method="POST">
+            <label for="name">ユーザー名</label>
+            <input type="text" id="user" name="user" required>
 
-    <form action="/register" method="POST">
-      <label for="name">名前</label>
-      <input type="text" id="user" name="user" required>
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" required>
 
-      <label for="password">パスワード</label>
-      <input type="password" id="password" name="password" required>
+            <label for="repassword">パスワード 再確認</label>
+            <input type="password" id="repassword" name="repassword" required>
 
-      <label for="repassword">パスワード 再確認</label>
-      <input type="password" id="repassword" name="repassword" required>
+            <button type="submit">登録</button>
+          </form>
 
-      <button type="submit">登録</button>
-    </form>
+          <!-- ページ移動用のリンク -->
+          <div class="navigation-links">
+            <form action="/login" method="GET">
+              <button type="submit" name="login">ログインページへ</button>
+            </form>
 
-    <!-- ページ移動用のリンク -->
-    <div class="navigation-links">
-      <form action="/login" method="GET">
-        <button type="submit" name="login">ログインページへ</button>
-      </form>
+            <form action="/" method="GET">
+              <input type="hidden" name="skipIntro" value="true" />
+              <button type="submit" name="hp">ホームに戻る</button>
+            </form>
 
-      <form action="/" method="GET">
-        <input type="hidden" name="skipIntro" value="true" />
-        <button type="submit" name="hp">ホームに戻る</button>
-      </form>
-
+          </div>
     </div>
   </div>
 
+
+
 </body>
+
 </html>
