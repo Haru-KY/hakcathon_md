@@ -15,6 +15,8 @@ import loginRouter from './routes/login.js';
 import regiRouter from './routes/register.js';
 import addRouter from './routes/add.js';
 import favoriteRouter from './routes/favorite.js';
+import summaryRouter from './routes/summarized_text.js';
+import logoutRouter from './routes/logout.js';
 var app = express();
 
 // view engine setup
@@ -44,6 +46,8 @@ app.use('/login', loginRouter);
 app.use('/register', regiRouter);
 app.use('/add', addRouter);
 app.use('/favorite', favoriteRouter);
+app.use('/summary', summaryRouter);
+app.use('/logout', logoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
