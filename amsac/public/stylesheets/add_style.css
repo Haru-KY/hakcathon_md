@@ -116,7 +116,7 @@ body{
     background-color: #aed1f7;
 }
 
-.todo-list {
+.summary-list {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease;
@@ -124,11 +124,11 @@ body{
 }
 
 /* 表示時に使うクラス */
-.todo-list.show {
+.summary-list.show {
     max-height: 500px; /* 十分大きめに設定する（中身に合わせて）*/
 }
 
-.todo-list li {
+.summary-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;

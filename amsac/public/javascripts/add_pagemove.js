@@ -10,13 +10,25 @@ document.querySelector('.btn').addEventListener('click', function () {
 // });
 
 //todoの複数同時表示　可
-document.querySelectorAll('.todo-description').forEach(function (desc, index) {
-    desc.addEventListener('click', function () {
-        const todoLists = document.querySelectorAll('.todo-list');
-        const targetList = todoLists[index]; // 対応する todo-list を取得
-        targetList.classList.toggle('show');
+// document.querySelectorAll('.todo-description').forEach(function (desc, index) {
+//     desc.addEventListener('click', function () {
+//         const todoLists = document.querySelectorAll('.summary-list');
+//         const targetList = todoLists[index]; // 対応する todo-list を取得
+//         targetList.classList.toggle('show');
 
+//     });
+// });
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('.todo-description').forEach(function (desc) {
+    desc.addEventListener('click', function () {
+      const emailBlock = desc.closest('.email-block');
+      const todoList = emailBlock.querySelector('.summary-list');
+      if (todoList) {
+        todoList.classList.toggle('show');
+      }
     });
+  });
 });
 
 //todoの複数同時表示　不可(他タブは閉じる)
