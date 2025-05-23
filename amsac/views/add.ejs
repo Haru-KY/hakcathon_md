@@ -108,9 +108,9 @@
                             <p style="color: red;">原文取得不可（message_id なし）</p>
                         <% } %>
                         <!-- タグを追加するフォーム -->
-                        <form action="/add-tag" method="get">
+                        <form action="/add-tag" method="post">
                         <input type="hidden" name="email_id" value="<%= email.id %>">
-                        <label for="tag_id_<%= email.id %>">タグを追加：</label>
+                        <label for="tag_id_<%= email.id %>">タグに追加：</label>
                         <select name="tag_id" id="tag_id_<%= email.id %>" required>
                             <option value="" disabled selected>選択してください</option>
                             <% tags.forEach(function(tag) { %>
