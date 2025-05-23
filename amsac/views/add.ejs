@@ -12,11 +12,17 @@
     <header>
         <div class="btn"><span></span><span></span><span></span></div>
         <nav id="menu">
-            <form action="" method="post">
+            <form action="/tag" method="post">
                 <div>
-                    <input type="text" name="tag-add" placeholder="タグを入力" class="textbox" id="tag-add">
-                    <input type="submit" value="追加" class="btn-submit" name="htag">
-                    <button type="button" id="ai-submit" class="btn-submit-ai" name="atag">自動タグ付け</button>
+                    <input type="text" name="utag" placeholder="タグを入力" class="textbox" id="utag">
+                    <input type="submit" value="追加" class="btn-submit">
+                </div>
+            </form>
+
+            <form action="/tag" method="post">
+                <div>
+                    <input type="text" name="aitag" placeholder="ai用タグを入力" class="textbox" id="aitag">
+                    <input type="submit" value="追加" class="btn-submit_ai">
                 </div>
             </form>
             <ul>
@@ -67,12 +73,14 @@
                 <form action="/" >
                     <li name="favorite"><a href="/add?favorite=true">FAVORITE</a></li>
                 </form>
-                <form action="/login" >
-                <li name="logout"><a href="/login">LOGOUT</a></li>
+                <form action="/logout" >
+                <li name="logout"><a href="/logout">LOGOUT</a></li>
                 </form>
-                <form action="/" >
-                    <li name="delete"><a href="/">Account delete</a></li>
+                <li name="delete">
+                <form action="/delete-account" method="POST" onsubmit="return confirm('本当にアカウントを削除しますか？');">
+                <button type="submit">Account delete</button>
                 </form>
+                </li>
             </ul>
         </nav>
     </header>
@@ -83,52 +91,70 @@
 
             <% if (emails && emails.length > 0) { %>
                 <% emails.forEach(function(email) { %>
-                <p class="todo-description">
+                <div class="email-block">
+                    <p class="todo-description">
                     <%= email.subject %>
                     <button class="fav-btn <%= email.is_favorite ? 'active' : '' %>" name="like" data-id="<%= email.id %>">★</button>
-                </p>
-                <ul class="todo-list">
-                    <li>
-                    <%= email.body.replace(/\n/g, "<br>") %>
-                    </li>
-                </ul>
+                    </p>
+                    <div class="summary-list">
+                    <div class="summary">
+                        <p><%= email.summary %></p>
+                        <!-- <li>
+                            <%= email.summary.replace(/\n/g, "<br>") %>
+                        </li> -->
+                        <% if (email.message_id) { %>
+                        <a href="/body?message_id=<%= email.message_id %>">
+                            <button type="button">原文を表示</button>
+                        </a>
+                        <% } else { %>
+                            <p style="color: red;">原文取得不可（message_id なし）</p>
+                        <% } %>
+                        <!-- タグを削除するフォーム -->
+                         <% if (email.tags && email.tags.length > 0) { %>
+                        <div class="tag-list">
+                            <% email.tags.forEach(function(tag) { %>
+                            <form action="/remove-tag" method="get" class="tag-form">
+                                <input type="hidden" name="email_id" value="<%= email.id %>">
+                                <input type="hidden" name="tag_id" value="<%= tag.id %>">
+                                <span class="tag">
+                                <%= tag.name %>
+                                <button type="submit" class="tag-remove-btn">✕</button>
+                                </span>
+                            </form>
+                            <% }); %>
+                        </div>
+                        <% } %>
+                        <!-- タグを追加するフォーム -->
+                        <form action="/add-tag" method="post">
+                        <input type="hidden" name="email_id" value="<%= email.id %>">
+                        <label for="tag_id_<%= email.id %>">タグに追加：</label>
+                        <select name="tag_id" id="tag_id_<%= email.id %>" required>
+                            <option value="" disabled selected>選択してください</option>
+                            <% tags.forEach(function(tag) { %>
+                            <option value="<%= tag.id %>"><%= tag.name %></option>
+                            <% }) %>
+                        </select>
+                        <button type="submit">追加</button>
+                        </form>
+                    </div>
+                    </div>
+                </div>
                 <% }); %>
             <% } else { %>
                 <p>表示するメールがありません。</p>
             <% } %>
+
             <div class="page-btn">
-                <button id="back-btn" class="nextback-btn" name="next">back</button>
-                <button id="next-btn" class="nextback-btn" name="back">next</button>
+                <a href="/add">
+                    <button id="back-btn" class="nextback-btn" name="back">back</button>
+                </a>
+                <a href="/add">
+                    <button id="next-btn" class="nextback-btn" name="next">next</button>
+                </a>
             </div>
+
         </section>
     </main>
-
-    <!-- メール要約機能完成後こちらで実装 -->
-    <!-- <main>
-    <section class="centered">
-        <h2>今日のやることリスト</h2>
-
-        <% emails.forEach(function(email, index) { %>
-        <p class="todo-description">
-            <%= email.subject %>
-            <button class="fav-btn" name="like">★</button>
-        </p>
-        <div class="summary">
-            <p><%= email.summary %></p>
-            <button class="toggle-original">原文を見る</button>
-        </div>
-        <div class="original" style="display: none;">
-            <p><%= email.original %></p>
-            <button class="toggle-summary">要約に戻す</button>
-        </div>
-        <% }) %>
-
-        <div class="page-btn">
-        <button id="back-btn" class="nextback-btn" name="next">back</button>
-        <button id="next-btn" class="nextback-btn" name="back">next</button>
-        </div>
-    </section>
-    </main> -->
     <script src="/javascripts/favoritebutton.js"></script>
     <script src="/javascripts/add_pagemove.js"></script>
 

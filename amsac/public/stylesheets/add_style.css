@@ -18,21 +18,30 @@ body{
 .btn{
     width: 50px;
     height: 50px;
-    border: 1px solid black;
+    border: 1px solid #ccc;
     cursor: pointer;
     z-index: 1000;
     position: relative;
+    background-color: #6b4c3b;
 }
 
 .btn span{
     display: inline-block;
     width: 50%;
     height: 2PX;
-    background-color: black;
+    background-color: #ccc;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     position: absolute;
+}
+
+.btn span.close{
+    background-color: #ccc;
+}
+
+.btn.close{
+    border: 1px solid #ccc;
 }
 
 .btn span:nth-last-of-type(1){
@@ -46,9 +55,9 @@ body{
 }
 
 #menu{
-    width: 20%;
+    width: 220px;
     height: 100vh;
-    background-color: #f6d6c1;
+    background-color: #6b4c3b;
     z-index: 999;
     position: fixed;
     top: 0;
@@ -70,7 +79,7 @@ body{
     margin: 0;
     display: flex;
     flex-direction: column;
-    color: #434b54;
+    color: #ccc;
     gap: 20px;
     padding-left: 30px;
 }
@@ -83,7 +92,7 @@ body{
 
 #menu ul li a {
     text-decoration: none;
-    color: #434b54;
+    color: #ccc;
     font-weight: 600;
     letter-spacing: 1px;
     transition: color 0.3s ease;
@@ -100,6 +109,8 @@ body{
     justify-content: center;
     min-height: 0;
     text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .todo-description{
@@ -116,7 +127,7 @@ body{
     background-color: #aed1f7;
 }
 
-.todo-list {
+.summary-list {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease;
@@ -124,11 +135,11 @@ body{
 }
 
 /* 表示時に使うクラス */
-.todo-list.show {
+.summary-list.show {
     max-height: 500px; /* 十分大きめに設定する（中身に合わせて）*/
 }
 
-.todo-list li {
+.summary-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -153,12 +164,14 @@ body{
 }
 
 .textbox {
-  width: 30%;
+  width: 60px;
   padding: 10px 10px;
   border-radius: 5px;
   margin-left: 30px;
   margin-top: 10px;
   border: 2px solid #ccc;
+  background-color: #ccc;
+  font-size: 8px;
 }
 
 .textbox:focus {
@@ -167,33 +180,33 @@ body{
 }
 
 .btn-submit {
-    background-color: #4CAF50; /* 緑色 */
+    background-color: #648a6b;
     color: white;
     padding: 8px 20px;
-    border: none;
+    border: 1px solid #ccc;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit_ai {
+    background-color: #487173; 
+    color: white;
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 10px;
     transition: background-color 0.3s ease;
 }
 
 .btn-submit:hover {
-    background-color: #45a049;
+    background-color: #3e8a42;
 }
 
-.btn-submit-ai {
-    background-color: #6e4ff5; /* 緑色 */
-    color: white;
-    padding: 8px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-submit-ai:hover {
-    background-color: #0f1180;
+.btn-submit_ai:hover {
+    background-color: #26858a;
 }
 
 
@@ -302,8 +315,8 @@ body{
 	margin: auto;
 	padding: 1rem 4rem;
 	font-weight: bold;
-	border: 2px solid #27acd9;
-	color: #27acd9;
+	border: 2px solid #6b4c3b;
+	color: #6b4c3b;
 	border-radius: 100vh;
 	transition: 0.5s;
     display: flex;
@@ -311,7 +324,7 @@ body{
 }
 .nextback-btn:hover {
 	color: #fff;
-	background: #27acd9;
+	background: #6b4c3b;
 }
 .page-btn{
     display: flex;
@@ -338,4 +351,69 @@ body{
 
 .toggle-original:hover, .toggle-summary:hover {
     background-color: #bbb;
+}
+
+.summary {
+    margin-bottom: 1.5em;
+    padding: 1em;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+
+    margin: 1.5em auto;
+    max-width: 500px;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+.summary p {
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+.summary button {
+    padding: 0.4em 0.8em;
+    font-size: 0.9em;
+    background-color: #6b4c3b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+}
+.email-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ← 中央寄せにする */
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 0.5em 0;
+}
+
+.tag-form {
+  display: inline;
+}
+
+.tag {
+  background-color: #a5c1aa;
+  color: #fff;
+  padding: 0.3em 0.8em;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85em;
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  margin-left: 0.4em;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.tag-remove-btn:hover {
+  color: #ffdddd;
 }

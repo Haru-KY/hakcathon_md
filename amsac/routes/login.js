@@ -59,14 +59,16 @@ router.post("/", async function (req, res, next){
         }
 
         req.session.userid = user.id;
-        res.cookie("userid", user.id, {
+        // req.session.tokens = tokens;
+        // res.cookie("userid", user.id, {
 
-            httpOnly: true,
-            maxAge: 1000 * 60 * 60
+        //     httpOnly: true,
+        //     maxAge: 1000 * 60 * 60
 
-        });
+        // });
 
-        return res.redirect("/add");
+        // return res.redirect("/add");
+        return res.redirect("/oauth2callback/auth/google");
     } catch (err) {
         console.error(err);
         res.render("login", {

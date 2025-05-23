@@ -1,0 +1,48 @@
+<!-- views/loading.ejs -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>読み込み中...</title>
+  <style>
+    .spinner {
+      margin: 100px auto;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ccc;
+      border-top: 5px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .message {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <div class="message">メールを要約中です...</div>
+
+  <script>
+    fetch('/summary/process')
+      .then(res => {
+        if (res.ok) {
+          window.location.href = '/add';
+        } else {
+          alert('メール要約中にエラーが発生しました');
+          window.location.href = '/';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('通信エラーが発生しました');
+        window.location.href = '/';
+      });
+  </script>
+</body>
+</html>

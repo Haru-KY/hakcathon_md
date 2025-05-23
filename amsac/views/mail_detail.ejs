@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title><%= email.subject %> | 原文</title>
+  <link rel="stylesheet" href="/stylesheets/detail_style.css" />
+</head>
+<body>
+  <main class="email-container">
+    <div class="email-card">
+      <h2 class="email-title"><%= email.subject %></h2>
+      <div class="email-meta">
+        <span>差出人：<%= email.author || "不明" %></span>
+        <span>受信日：<%= new Date(email.created_at).toLocaleString('ja-JP') %></span>
+      </div>
+      <div class="email-body">
+        <%= email.body.replace(/\n/g, " ") %>
+      </div>
+      <div class="email-footer">
+        <a href="/add" class="back-link">← メール一覧に戻る</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

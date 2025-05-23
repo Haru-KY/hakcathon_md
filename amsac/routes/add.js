@@ -20,7 +20,7 @@ router.get( '/', async function ( req, res, next) {
         const favorite = req.query.favorite;
 
         let emailsQuery = knex("email")
-            .select("id", "subject", "is_favorite", "body")
+            .select("id","message_id", "subject", "is_favorite", "body", "summary")
             .where("user_id", userId)
 
         if (tagName && tagName.trim() !== ""){
@@ -96,7 +96,7 @@ router.get( '/', async function ( req, res, next) {
 
         emailsQuery = emailsQuery.orderBy( "created_at", "desc" );
 
-        const emali_tags = await knex( "email_tags")
+        const email_tags = await knex( "email_tags")
             .select("email_id", "tag_id")
             .where("user_id", userId)
 
@@ -116,7 +116,7 @@ router.get( '/', async function ( req, res, next) {
             emails: emails,
             tags: tags,
             ai_tags: ai_tags,
-            emial_tags: emali_tags
+            email_tags: email_tags
         });
     } catch (err) {
 
