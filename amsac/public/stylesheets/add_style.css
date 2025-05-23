@@ -18,7 +18,7 @@ body{
 .btn{
     width: 50px;
     height: 50px;
-    border: 1px solid black;
+    border: 1px solid #ccc;
     cursor: pointer;
     z-index: 1000;
     position: relative;
@@ -28,11 +28,19 @@ body{
     display: inline-block;
     width: 50%;
     height: 2PX;
-    background-color: black;
+    background-color: #ccc;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     position: absolute;
+}
+
+.btn span.close{
+    background-color: black;
+}
+
+.btn.close{
+    border: 1px solid black;
 }
 
 .btn span:nth-last-of-type(1){
@@ -48,7 +56,7 @@ body{
 #menu{
     width: 20%;
     height: 100vh;
-    background-color: #f6d6c1;
+    background-color: #6b4c3b;
     z-index: 999;
     position: fixed;
     top: 0;
@@ -70,7 +78,7 @@ body{
     margin: 0;
     display: flex;
     flex-direction: column;
-    color: #434b54;
+    color: #ccc;
     gap: 20px;
     padding-left: 30px;
 }
@@ -83,7 +91,7 @@ body{
 
 #menu ul li a {
     text-decoration: none;
-    color: #434b54;
+    color: #ccc;
     font-weight: 600;
     letter-spacing: 1px;
     transition: color 0.3s ease;
@@ -159,6 +167,7 @@ body{
   margin-left: 30px;
   margin-top: 10px;
   border: 2px solid #ccc;
+  background-color: #ccc;
 }
 
 .textbox:focus {
@@ -167,10 +176,21 @@ body{
 }
 
 .btn-submit {
-    background-color: #4CAF50; 
+    background-color: #648a6b;
     color: white;
     padding: 8px 20px;
-    border: none;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit_ai {
+    background-color: #487173; 
+    color: white;
+    padding: 8px 20px;
+    border: 1px solid #ccc;
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
@@ -178,22 +198,11 @@ body{
 }
 
 .btn-submit:hover {
-    background-color: #45a049;
+    background-color: #3e8a42;
 }
 
-.btn-submit-ai {
-    background-color: #6e4ff5; 
-    color: white;
-    padding: 8px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-submit-ai:hover {
-    background-color: #0f1180;
+.btn-submit_ai:hover {
+    background-color: #26858a;
 }
 
 
@@ -302,8 +311,8 @@ body{
 	margin: auto;
 	padding: 1rem 4rem;
 	font-weight: bold;
-	border: 2px solid #27acd9;
-	color: #27acd9;
+	border: 2px solid #6b4c3b;
+	color: #6b4c3b;
 	border-radius: 100vh;
 	transition: 0.5s;
     display: flex;
@@ -311,7 +320,7 @@ body{
 }
 .nextback-btn:hover {
 	color: #fff;
-	background: #27acd9;
+	background: #6b4c3b;
 }
 .page-btn{
     display: flex;
