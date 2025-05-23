@@ -23,7 +23,8 @@ import summaryRouter from './routes/summarized_text.js';
 import logoutRouter from './routes/logout.js';
 import tagRouter from './routes/add_tag.js';
 import authRouter from './routes/gmailOAuth.js';
-import bodyRouter from './routes/mail_detail.js'
+import bodyRouter from './routes/mail_detail.js';
+import mailaddRouter from './routes/addMail_tag.js';
 var app = express();
 
 // view engine setup
@@ -58,6 +59,7 @@ app.use('/logout', logoutRouter);
 app.use('/tag', tagRouter);
 app.use('/oauth2callback', authRouter);
 app.use('/body', bodyRouter);
+app.use('/add-tag', mailaddRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
