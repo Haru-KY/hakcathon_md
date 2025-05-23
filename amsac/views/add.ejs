@@ -112,9 +112,19 @@
             <% } %>
 
             <div class="page-btn">
-                <button id="back-btn" class="nextback-btn" name="next">back</button>
-                <button id="next-btn" class="nextback-btn" name="back">next</button>
+                <% if (page > 1) { %>
+                    <a href="/add?page=<%= page - 1 %>">
+                        <button id="back-btn" class="nextback-btn" name="back">back</button>
+                    </a>
+                <% } %>
+
+                <% if (page < totalPages) { %>
+                    <a href="/add?page=<%= page + 1 %>">
+                        <button id="next-btn" class="nextback-btn" name="next">next</button>
+                    </a>
+                <% } %>
             </div>
+
         </section>
     </main>
     <script src="/javascripts/favoritebutton.js"></script>
