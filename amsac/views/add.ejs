@@ -107,6 +107,21 @@
                         <% } else { %>
                             <p style="color: red;">原文取得不可（message_id なし）</p>
                         <% } %>
+                        <!-- タグを削除するフォーム -->
+                         <% if (email.tags && email.tags.length > 0) { %>
+                        <div class="tag-list">
+                            <% email.tags.forEach(function(tag) { %>
+                            <form action="/remove-tag" method="get" class="tag-form">
+                                <input type="hidden" name="email_id" value="<%= email.id %>">
+                                <input type="hidden" name="tag_id" value="<%= tag.id %>">
+                                <span class="tag">
+                                <%= tag.name %>
+                                <button type="submit" class="tag-remove-btn">✕</button>
+                                </span>
+                            </form>
+                            <% }); %>
+                        </div>
+                        <% } %>
                         <!-- タグを追加するフォーム -->
                         <form action="/add-tag" method="get">
                         <input type="hidden" name="email_id" value="<%= email.id %>">

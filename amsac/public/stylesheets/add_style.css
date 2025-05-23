@@ -383,3 +383,37 @@ body{
     flex-direction: column;
     align-items: center; /* ← 中央寄せにする */
 }
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 0.5em 0;
+}
+
+.tag-form {
+  display: inline;
+}
+
+.tag {
+  background-color: #a5c1aa;
+  color: #fff;
+  padding: 0.3em 0.8em;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85em;
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  margin-left: 0.4em;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.tag-remove-btn:hover {
+  color: #ffdddd;
+}
