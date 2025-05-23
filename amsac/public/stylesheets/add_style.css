@@ -167,7 +167,7 @@ body{
 }
 
 .btn-submit {
-    background-color: #4CAF50; /* 緑色 */
+    background-color: #4CAF50; 
     color: white;
     padding: 8px 20px;
     border: none;
@@ -182,7 +182,7 @@ body{
 }
 
 .btn-submit-ai {
-    background-color: #6e4ff5; /* 緑色 */
+    background-color: #6e4ff5; 
     color: white;
     padding: 8px 20px;
     border: none;
