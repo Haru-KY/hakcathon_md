@@ -98,14 +98,15 @@ async function saveEmail(email, userId) {
 }
 
 // メールタグ関連をDBに保存
-async function saveEmailTags(emailId, tagIds) {
+async function saveEmailTags(emailId, tagIds, userId) {
   if (!tagIds.length) return;
-  await knex('email_tags').where('email_id', emailId).del();
+  await knex('email_ai_tags').where('email_id', emailId).del();
   const insertRows = tagIds.map(tagId => ({
     email_id: emailId,
     tag_id: tagId,
+    user_id: userId
   }));
-  await knex('email_tags').insert(insertRows);
+  await knex('email_ai_tags').insert(insertRows);
 }
 
 // // Ollamaプロンプトテンプレート
@@ -237,7 +238,7 @@ router.get('/', checkAuth, async (req, res) => {
       };
       const emailId = await saveEmail(emailRecord, userId);
       const matchedTags = parsed.tags.filter(t => tagNameToId[t]); // 有効なタグのみ抽出
-      await saveEmailTags(emailId, matchedTags.map(t => tagNameToId[t]));
+      await saveEmailTags(emailId, matchedTags.map(t => tagNameToId[t]), userId);
 
       results.push({
         ...emailRecord,
