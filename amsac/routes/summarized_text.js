@@ -6,19 +6,24 @@ import { RunnableSequence } from "@langchain/core/runnables";
 import knex from '../db/db.js';  // knexを使う前提
 
 const jsonSummaryTagPrompt = ChatPromptTemplate.fromTemplate(
-  `以下のメール本文を読み、日本語で要約し、内容に基づいて適切なタグをJSON形式で出力してください。
+  `以下のメール本文を読み、日本語で要約し、JSON形式で出力してください。
+  要約する文がhtml形式の場合、<br>もしくは</br>はすべてなくすようにお願いします。
   出力は必ず1つのJSONコードブロックのみで、他の説明は不要です。
 
-タグ一覧: {tags}
+  次のタグのリストの中からメール本文の内容に合致しているタグを、カンマ区切りで正確に抽出してください。関係ない場合は出力しないでください。\n\nタグ一覧: {tags}\n\nメール本文:\n{emailBody}
+  次のメール本文の内容に返信が必要かどうかを「はい」または「いいえ」で判別してください。\n\n{emailBody}\n\n返信必要:
+  もし、返信が必要であると判断した場合、その重要度を1（低）～3（高）で答えてください。\n重要度が判断できない場合は「0」としてください。\n\n{emailBody}\n\n重要度:
 
-出力形式（例）:
-{{ 
-  "summary": "これは会議に関するメールです。",
-  "tags": ["会議", "予定"]
-}}
+  タグ一覧: {tags}
 
-メール本文:
-{emailBody}`
+  出力形式（例）:
+  {{ 
+    "summary": "これは会議に関するメールです。",
+    "tags": ["会議", "予定"]
+  }}
+
+  メール本文:
+  {emailBody}`
 );
 
 
