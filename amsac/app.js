@@ -25,6 +25,7 @@ import tagRouter from './routes/add_tag.js';
 import authRouter from './routes/gmailOAuth.js';
 import bodyRouter from './routes/mail_detail.js';
 import mailaddRouter from './routes/addMail_tag.js';
+import accountdeleteRouter from './routes/deleteaccount.js';
 var app = express();
 
 // view engine setup
@@ -60,6 +61,7 @@ app.use('/tag', tagRouter);
 app.use('/oauth2callback', authRouter);
 app.use('/body', bodyRouter);
 app.use('/add-tag', mailaddRouter);
+app.use('/delete-account', accountdeleteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
