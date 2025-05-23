@@ -1,5 +1,9 @@
 document.querySelector('.btn').addEventListener('click', function () {
     document.getElementById('menu').classList.toggle('close');
+    document.querySelectorAll('.btn span').forEach(function (desc) {
+        desc.classList.toggle('close');
+    });
+    document.querySelector('.btn').classList.toggle('close');
 });
 
 // document.querySelectorAll('.fav-btn').forEach(function (btn) {
