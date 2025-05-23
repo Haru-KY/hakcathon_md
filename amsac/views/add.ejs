@@ -76,9 +76,11 @@
                 <form action="/logout" >
                 <li name="logout"><a href="/logout">LOGOUT</a></li>
                 </form>
-                <form action="/" >
-                    <li name="delete"><a href="/">Account delete</a></li>
+                <li name="delete">
+                <form action="/delete-account" method="POST" onsubmit="return confirm('本当にアカウントを削除しますか？');">
+                <button type="submit">Account delete</button>
                 </form>
+                </li>
             </ul>
         </nav>
     </header>
