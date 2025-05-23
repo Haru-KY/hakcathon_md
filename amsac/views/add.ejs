@@ -103,6 +103,18 @@
                         <form action="/mail/<%= email.id %>" method="get">
                         <button type="submit">原文を表示</button>
                         </form>
+                        <!-- タグを追加するフォーム -->
+                        <form action="/add-tag" method="get">
+                        <input type="hidden" name="email_id" value="<%= email.id %>">
+                        <label for="tag_id_<%= email.id %>">タグを追加：</label>
+                        <select name="tag_id" id="tag_id_<%= email.id %>" required>
+                            <option value="" disabled selected>選択してください</option>
+                            <% tags.forEach(function(tag) { %>
+                            <option value="<%= tag.id %>"><%= tag.name %></option>
+                            <% }) %>
+                        </select>
+                        <button type="submit">追加</button>
+                        </form>
                     </div>
                     </div>
                 </div>
@@ -112,17 +124,12 @@
             <% } %>
 
             <div class="page-btn">
-                <% if (page > 1) { %>
-                    <a href="/add?page=<%= page - 1 %>">
-                        <button id="back-btn" class="nextback-btn" name="back">back</button>
-                    </a>
-                <% } %>
-
-                <% if (page < totalPages) { %>
-                    <a href="/add?page=<%= page + 1 %>">
-                        <button id="next-btn" class="nextback-btn" name="next">next</button>
-                    </a>
-                <% } %>
+                <a href="/add">
+                    <button id="back-btn" class="nextback-btn" name="back">back</button>
+                </a>
+                <a href="/add">
+                    <button id="next-btn" class="nextback-btn" name="next">next</button>
+                </a>
             </div>
 
         </section>
