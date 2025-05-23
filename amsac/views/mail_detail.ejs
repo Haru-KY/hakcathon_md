@@ -7,6 +7,8 @@
 <body>
     <main>
         <h2><%= email.subject %></h2>
+        <p>送信者: <%= email.author %></p>
+        <p>日時: <%= new Date(email.created_at).toLocaleString('ja-JP') %></p>
         <p><%= email.body.replace(/\n/g, "<br>") %></p>
         <a href="/add">← メール一覧に戻る</a>
     </main>

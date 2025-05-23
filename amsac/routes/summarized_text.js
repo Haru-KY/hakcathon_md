@@ -186,6 +186,7 @@ router.get('/', checkAuth, async (req, res) => {
 
       const headers = message.payload.headers || [];
       const subject = headers.find(h => h.name === 'Subject')?.value || '(件名なし)';
+      const from = headers.find(h => h.name === 'From')?.value || '(送信者不明)';
       const time = headers.find(h => h.name === 'Date')?.value || new Date().toISOString();
       const body = extractBody(message.payload);
 
@@ -225,6 +226,7 @@ router.get('/', checkAuth, async (req, res) => {
         message_id: message.id,
         subject,
         body,
+        author: from,
         summary: parsed.summary || '要約なし',
         created_at: new Date(time),
       };
