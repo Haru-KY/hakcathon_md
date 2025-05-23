@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       shown = true;
 
       setTimeout(function () {
-        aboutSection.scrollIntoView({ behavior: "smooth" });
+        aboutSection.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     });
   }
