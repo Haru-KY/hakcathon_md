@@ -10,11 +10,11 @@
     <div class="email-card">
       <h2 class="email-title"><%= email.subject %></h2>
       <div class="email-meta">
-        <span>差出人：<%= email.from || "不明" %></span>
-        <span>受信日：<%= email.date || "不明" %></span>
+        <span>差出人：<%= email.author || "不明" %></span>
+        <span>受信日：<%= new Date(email.created_at).toLocaleString('ja-JP') %></span>
       </div>
       <div class="email-body">
-        <%= email.body.replace(/\n/g, "") %>
+        <%= email.body.replace(/\n/g, " ") %>
       </div>
       <div class="email-footer">
         <a href="/add" class="back-link">← メール一覧に戻る</a>
