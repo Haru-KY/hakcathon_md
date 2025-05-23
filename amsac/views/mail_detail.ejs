@@ -7,7 +7,7 @@
 <body>
     <main>
         <h2><%= email.subject %></h2>
-        <p><%= email.original.replace(/\n/g, "<br>") %></p>
+        <p><%= email.body.replace(/\n/g, "<br>") %></p>
         <a href="/add">← メール一覧に戻る</a>
     </main>
 </body>
