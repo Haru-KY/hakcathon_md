@@ -18,7 +18,7 @@ router.get( '/', async function ( req, res, next) {
   
 
         const tagName = req.query.tag;
-        const aiTagName = req.query.aitag;
+        const aiTagName = (!req.query.tag || req.query.tag.trim() === "") ? req.query.aitag : null;
         const favorite = req.query.favorite;
 
         // ページネーションの設定
