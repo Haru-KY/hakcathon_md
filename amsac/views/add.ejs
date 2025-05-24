@@ -45,7 +45,7 @@
                         <% if (tags && tags.length > 0) { %>
                             <% tags.forEach(function(tag) { %>
                                 <li>
-                                    <a href="/add?<%= currentTag ? 'tag=' + encodeURIComponent(tag.name) + '&' : 'aitag=' + encodeURIComponent(tag) + '&' %><%= favorite ? 'favorite=true' : '' %>">
+                                    <a href="/add?tag=<%= encodeURIComponent(tag.name) %><%= favorite ? '&favorite=true' : '' %><%= currentAiTag ? '&aitag=' + encodeURIComponent(currentAiTag) : '' %>">
                                     <%= tag.name %>
                                     </a>
                                 </li>
@@ -65,7 +65,7 @@
                         <% if (ai_tags && ai_tags.length > 0) { %>
                             <% ai_tags.forEach(function(ai_tag) { %>
                                 <li>
-                                    <a href="/add?<%= currentAiTag ? 'aitag=' + encodeURIComponent(ai_tag.name) + '&' : 'aitag=' + encodeURIComponent(ai_tag.name) + '&' %><%= favorite ? 'favorite=true' : '' %>">
+                                    <a href="/add?aitag=<%= encodeURIComponent(ai_tag.name) %><%= favorite ? '&favorite=true' : '' %>">
                                         <%= ai_tag.name %>
                                     </a>
                                 </li>
@@ -162,12 +162,12 @@
                 <% const queryStr = baseQuery.join('&'); %>
 
                 <% if (page > 0) { %>
-                    <a href="/add?<%= queryStr %>&page=<%= page - 1 %>">
+                    <a href="/summary?<%= queryStr %>&page=<%= page - 1 %>">
                         <button class="nextback-btn">Back</button>
                     </a>
                 <% } %>
                 <p>ページ<%= page %></p>
-                <a href="/add?<%= queryStr %>&page=<%= page + 1 %>">
+                <a href="/summary?<%= queryStr %>&page=<%= page + 1 %>">
                     <button class="nextback-btn">Next</button>
                 </a>
             </div>
