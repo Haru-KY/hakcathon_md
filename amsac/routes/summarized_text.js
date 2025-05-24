@@ -159,7 +159,7 @@ router.get('/', checkAuth, async (req, res) => {
     });
 
     // スレッドIDをセッションに保持（初回またはリセット時）
-    if (!req.session.threadIds || req.query.page === '1') {
+    if (!req.session.threadIds || req.session.threadIds.length === 0) {
       let allThreads = [];
       let nextPageToken = null;
       do {
@@ -176,19 +176,26 @@ router.get('/', checkAuth, async (req, res) => {
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = 5;
-    const totalPages = Math.ceil(req.session.threadIds.length / pageSize);
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const threadPage = req.session.threadIds.slice(start, end);
+    const totalThreads = req.session.threadIds.length;
+    const totalPages = Math.ceil(totalThreads / pageSize);
 
-    const results = [];
+    const maxCursor = Math.max(0, totalThreads - pageSize);
+    let cursor = (page - 1) * pageSize;
+    if (cursor > maxCursor) cursor = maxCursor;
 
-    const chain = createOllamaChain();
+    const threadPage = req.session.threadIds.slice(cursor, cursor + pageSize);
+        const results = [];
+        const chain = createOllamaChain();
 
     for (const threadId of threadPage) {
       const detail = await gmail.users.threads.get({ userId: 'me', id: threadId });
       const message = detail.data.messages?.[0];
       if (!message) continue;
+
+      const messageId = message.id;
+
+      const exists = await knex('email').where({ message_id: messageId }).first();
+      if (exists) continue;
 
       const headers = message.payload.headers || [];
       const subject = headers.find(h => h.name === 'Subject')?.value || '(件名なし)';
@@ -200,36 +207,17 @@ router.get('/', checkAuth, async (req, res) => {
 
       let parsed;
       try {
-
         const cleaned = cleanJsonString(output.text);
         parsed = JSON.parse(cleaned);
-
-      }catch(err)
-      {
+      } catch (err) {
         console.error("JSON parse error:", err.message);
-        console.error("Invalid data was:", output.text.slice(0, 300)); // 内容の先頭だけログに出す
-        parsed = { summary: "要約取得失敗", tags: [] }; // 代替処理
+        console.error("Invalid data was:", output.text.slice(0, 300));
+        parsed = { summary: "要約取得失敗", tags: [] };
       }
 
-      // // Ollama要約
-      // const summaryResponse = await ollama.chat({
-      //   model: 'gemma3:4b',
-      //   messages: [{ role: 'user', content: await summaryPrompt.format({ emailBody: body }) }],
-      // });
-      // const summary = summaryResponse.message?.content || '(要約取得失敗)';
-
-      // // Ollamaタグ判定
-      // const tagResponse = await ollama.chat({
-      //   model: 'gemma3:4b',
-      //   messages: [{ role: 'user', content: await tagPromptTemplate.format({ tags: tagNames.join(', '), emailBody: body }) }],
-      // });
-      // const tagContent = tagResponse.message?.content || '';
-      // const matchedTags = tagContent.split(',').map(t => t.trim()).filter(t => tagNameToId[t]);
-
-      // DB保存
       const emailRecord = {
         user_id: userId,
-        message_id: message.id,
+        message_id: messageId,
         subject,
         body,
         author: from,
@@ -243,7 +231,6 @@ router.get('/', checkAuth, async (req, res) => {
 
       results.push({
         ...emailRecord,
-        // tags: matchedTags,
         tags: parsed.tags,
       });
     }
@@ -253,7 +240,10 @@ router.get('/', checkAuth, async (req, res) => {
       return res.status(401).send('ユーザーが存在しません');
     }
 
-    res.redirect('/add');
+    const currentPage = parseInt(req.query.page) || 1;
+    const safePage = currentPage <= totalPages ? currentPage : totalPages;
+    res.redirect(`/add?page=${safePage}`);
+
 
   } catch (err) {
     console.error(err);
