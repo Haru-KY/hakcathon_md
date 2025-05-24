@@ -109,21 +109,25 @@
                         <% } else { %>
                             <p style="color: red;">原文取得不可（message_id なし）</p>
                         <% } %>
-                        <!-- タグを削除するフォーム -->
-                         <% if (email.tags && email.tags.length > 0) { %>
-                        <div class="tag-list">
+                        <!-- タグ削除のフォーム -->
+                        <div class="tag_list">
+                        <% if (email.tags && email.tags.length > 0) { %>
                             <% email.tags.forEach(function(tag) { %>
                             <form action="/remove-tag" method="get" class="tag-form">
-                                <input type="hidden" name="email_id" value="<%= email.id %>">
-                                <input type="hidden" name="tag_id" value="<%= tag.id %>">
-                                <span class="tag">
+                            <input type="hidden" name="email_id" value="<%= email.id %>">
+                            <input type="hidden" name="tag_id" value="<%= tag.id %>">
+                            <button type="submit" class="tag">
                                 <%= tag.name %>
-                                <button type="submit" class="tag-remove-btn">✕</button>
-                                </span>
+                                <span class="tag-remove-btn">✕</span><!-- 削除ボタン -->
+                            </button>
                             </form>
                             <% }); %>
-                        </div>
+                        <% } else { %>
+                            <p class="no-tag">タグなし</p>
                         <% } %>
+                        </div>
+
+                        <!-- <pre><%= JSON.stringify(email.tags) %></pre> -->
                         <!-- タグを追加するフォーム -->
                         <form action="/add-tag" method="post">
                         <input type="hidden" name="email_id" value="<%= email.id %>">

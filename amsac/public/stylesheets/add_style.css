@@ -391,29 +391,48 @@ body{
   margin: 0.5em 0;
 }
 
+.tag_list {
+  display: block;
+  min-height: 24px;
+  margin-bottom: 6px;
+  background-color: #eef6ec; /* テストのために薄い背景色 */
+  padding: 4px;
+  border-radius: 4px;
+}
+
+
 .tag-form {
-  display: inline;
+  display: inline-block;
+  margin: 2px;
+  padding: 0; /* padding不要に */
+  background: none;
+  border: none;
 }
 
 .tag {
-  background-color: #a5c1aa;
-  color: #fff;
-  padding: 0.3em 0.8em;
-  border-radius: 12px;
-  display: inline-flex;
+  display: inline-flex; /* 子要素を横並びに */
   align-items: center;
-  font-size: 0.85em;
+  padding: 4px 8px;
+  background-color: #d5e8d4;
+  border-radius: 12px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  gap: 4px;
 }
 
 .tag-remove-btn {
-  background: none;
-  border: none;
-  color: #fff;
-  margin-left: 0.4em;
-  cursor: pointer;
-  font-size: 0.9em;
+  font-size: 12px;
+  color: #555;
+  margin-left: 4px;
+  pointer-events: none; /* ボタン風だがsubmitイベントを止めない */
 }
 
-.tag-remove-btn:hover {
-  color: #ffdddd;
+.tag:hover {
+  background-color: #cce0cc;
+  transition: background-color 0.2s ease;
+}
+.tag:hover .tag-remove-btn {
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
 }
