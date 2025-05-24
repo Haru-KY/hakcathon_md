@@ -41,11 +41,11 @@
                         <a href="#">TAG</a>
                         <div class="open-close"><span></span><span></span></div>
                     </div>
-                    <ul class="tag-list-ai">
+                    <ul class="tag-list">
                         <% if (tags && tags.length > 0) { %>
                             <% tags.forEach(function(tag) { %>
                                 <li>
-                                    <a href="/add?<%= currentTag ? 'tag=' + encodeURIComponent(tag.name) + '&' : 'tag=' + encodeURIComponent(tag.name) + '&' %><%= favorite ? 'favorite=true' : '' %>">
+                                    <a href="/add?<%= currentTag ? 'tag=' + encodeURIComponent(tag.name) + '&' : 'aitag=' + encodeURIComponent(tag) + '&' %><%= favorite ? 'favorite=true' : '' %>">
                                     <%= tag.name %>
                                     </a>
                                 </li>
