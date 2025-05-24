@@ -28,6 +28,10 @@ import mailaddRouter from './routes/addMail_tag.js';
 import accountdeleteRouter from './routes/deleteaccount.js';
 var app = express();
 
+import removeTagRouter from './routes/remove_tag.js';
+app.use('/', removeTagRouter);
+
+
 // view engine setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

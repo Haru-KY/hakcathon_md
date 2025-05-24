@@ -135,6 +135,17 @@ router.get( '/', async function ( req, res, next) {
             .select("id", "user_id", "name")
             .where("user_id", userId)
 
+        // 各メールに tags を結びつける処理を追加
+        emails.forEach(email => {
+            const relatedTagIds = email_tags
+                .filter(et => Number(et.email_id) === Number(email.id))
+                .map(et => Number(et.tag_id));
+
+            email.tags = tags.filter(tag => relatedTagIds.includes(Number(tag.id)));
+        });
+
+        console.log(JSON.stringify(emails, null, 2));
+
         res.render("add", {
             title: "Main page",
             emails: emails,
