@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import knex from '../db/db.js';
 
-router.get('/remove-tag', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const userId = req.session.userid;
 

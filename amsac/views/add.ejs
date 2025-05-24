@@ -41,11 +41,13 @@
                         <a href="#">TAG</a>
                         <div class="open-close"><span></span><span></span></div>
                     </div>
-                    <ul class="tag-list">
+                    <ul class="tag-list-ai">
                         <% if (tags && tags.length > 0) { %>
                             <% tags.forEach(function(tag) { %>
                                 <li>
-                                    <a href="/add?tag=<%= encodeURIComponent(tag.name) %>"><%= tag.name %></a>
+                                    <a href="/add?<%= currentTag ? 'tag=' + encodeURIComponent(tag.name) + '&' : 'tag=' + encodeURIComponent(tag.name) + '&' %><%= favorite ? 'favorite=true' : '' %>">
+                                    <%= tag.name %>
+                                    </a>
                                 </li>
                             <% }); %>
                         <% } else { %>
@@ -63,13 +65,16 @@
                         <% if (ai_tags && ai_tags.length > 0) { %>
                             <% ai_tags.forEach(function(ai_tag) { %>
                                 <li>
-                                    <a href="/add?aitag=<%= encodeURIComponent(ai_tag.name) %>"><%= ai_tag.name %></a>
+                                    <a href="/add?<%= currentAiTag ? 'aitag=' + encodeURIComponent(ai_tag.name) + '&' : 'aitag=' + encodeURIComponent(ai_tag.name) + '&' %><%= favorite ? 'favorite=true' : '' %>">
+                                        <%= ai_tag.name %>
+                                    </a>
                                 </li>
                             <% }); %>
                         <% } else { %>
                             <li><p>表示するAI tagがありません。</p></li>
                         <% } %>
                     </ul>
+
                 </li>
                 <form action="/" >
                     <li name="favorite"><a href="/add?favorite=true">FAVORITE</a></li>
@@ -150,15 +155,21 @@
             <% } %>
 
             <div class="page-btn">
-            <% if (page > 0) { %>
-                <a href="/summary?page=<%= page - 1 %>">
-                <button class="nextback-btn">Back</button>
+                <% const baseQuery = []; %>
+                <% if (typeof currentTag !== 'undefined') { baseQuery.push(`tag=${encodeURIComponent(currentTag)}`); } %>
+                <% if (typeof currentAiTag !== 'undefined') { baseQuery.push(`aitag=${encodeURIComponent(currentAiTag)}`); } %>
+                <% if (typeof favorite !== 'undefined') { baseQuery.push(`favorite=true`); } %>
+                <% const queryStr = baseQuery.join('&'); %>
+
+                <% if (page > 0) { %>
+                    <a href="/add?<%= queryStr %>&page=<%= page - 1 %>">
+                        <button class="nextback-btn">Back</button>
+                    </a>
+                <% } %>
+                <p>ページ<%= page %></p>
+                <a href="/add?<%= queryStr %>&page=<%= page + 1 %>">
+                    <button class="nextback-btn">Next</button>
                 </a>
-            <% } %>
-            <p>ページ<%= page %></p>
-            <a href="/summary?page=<%= page + 1 %>">
-            <button class="nextback-btn">Next</button>
-            </a>
             </div>
 
         </section>
