@@ -218,7 +218,7 @@ router.get('/', checkAuth, async (req, res) => {
     }
 
     const page = parseInt(req.query.page) || 1;
-    const pageSize = 5;
+    const pageSize = 10;
     const totalThreads = req.session.threadIds.length;
     const totalPages = Math.ceil(totalThreads / pageSize);
 
@@ -286,9 +286,15 @@ router.get('/', checkAuth, async (req, res) => {
       return res.status(401).send('ユーザーが存在しません');
     }
 
-    const currentPage = parseInt(req.query.page) || 1;
-    const safePage = currentPage <= totalPages ? currentPage : totalPages;
-    res.redirect(`/add?page=${safePage}`);
+    const { tag, aitag, favorite } = req.query;  // pageはここでは分割代入しない
+
+    // 以降、pageを使う
+    let redirectUrl = `/add?page=${page}`;
+    if (tag) redirectUrl += `&tag=${encodeURIComponent(tag)}`;
+    if (aitag) redirectUrl += `&aitag=${encodeURIComponent(aitag)}`;
+    if (favorite) redirectUrl += `&favorite=${favorite}`;
+
+    res.redirect(redirectUrl);
 
 
   } catch (err) {

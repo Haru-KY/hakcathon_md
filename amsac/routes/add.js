@@ -152,15 +152,15 @@ router.get( '/', async function ( req, res, next) {
             tags: tags,
             ai_tags: ai_tags,
             email_tags: email_tags,
-            page: page,
             totalPages: totalPages,
             hasNextPage: hasNextPage,
             pageSize: limit,
             cursor: offset,
             totalThreads: totalCount,
-            tag: tagName || "",
-            aitag: aiTagName || "",
-            favorite: favorite || ""
+            page: parseInt(req.query.page || '0'),
+            currentTag: req.query.tag,
+            currentAiTag: req.query.aitag,
+            favorite: req.query.favorite
         });
     } catch (err) {
 
