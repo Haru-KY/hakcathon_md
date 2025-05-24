@@ -10,6 +10,8 @@ const oauth2Client = new google.auth.OAuth2(
   process.env.REDIRECT_URI
 );
 
+console.log('CLIENT_ID:', process.env.CLIENT_ID);
+
 // 1. Googleの認証画面にユーザを飛ばすためのURLを生成してリダイレクト
 router.get('/auth/google', function (req, res){
   const url = oauth2Client.generateAuthUrl({
