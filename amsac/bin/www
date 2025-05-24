@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
+
+
 /**
  * Module dependencies.
  */
 
 import dotenv from 'dotenv';
 dotenv.config();
+console.log("CLIENT_ID:", process.env.CLIENT_ID); // ここで表示されるか確認
 
 import app from '../app.js';
 import debugLib from 'debug';

@@ -157,7 +157,10 @@ router.get( '/', async function ( req, res, next) {
             hasNextPage: hasNextPage,
             pageSize: limit,
             cursor: offset,
-            totalThreads: totalCount
+            totalThreads: totalCount,
+            tag: tagName || "",
+            aitag: aiTagName || "",
+            favorite: favorite || ""
         });
     } catch (err) {
 
