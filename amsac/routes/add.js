@@ -107,7 +107,7 @@ router.get( '/', async function ( req, res, next) {
         const totalPages = Math.ceil(totalCount / limit);
 
         // メール取得
-// データを取得するクエリ（詳細を含む）
+        // データを取得するクエリ（詳細を含む）
 
         const emailsRaw = await emailsQuery
             .orderBy("created_at", "desc")
