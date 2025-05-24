@@ -136,7 +136,7 @@ body{
 
 /* 表示時に使うクラス */
 .summary-list.show {
-    max-height: 500px; /* 十分大きめに設定する（中身に合わせて）*/
+    max-height: 1000px; /* 十分大きめに設定する（中身に合わせて）*/
 }
 
 .summary-list li {
