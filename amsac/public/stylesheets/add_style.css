@@ -417,3 +417,26 @@ body{
 .tag-remove-btn:hover {
   color: #ffdddd;
 }
+
+.delete-account-btn {
+    background-color: #b33a3a; /* 暗めの赤 */
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-account-btn:hover {
+    background-color: #8a2a2a;
+
+}
+
+.account-delete-li {
+    margin-top: auto; 
+    padding-bottom: 20px;
+}
