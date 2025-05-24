@@ -44,6 +44,47 @@ header {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  display: flex;
+  padding: 12px 24px;
+  border-bottom: 1px solid #ccc;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+}
+
+.site-logo {
+  width: 50px;  /* お好みで調整：24〜40px推奨 */
+  height: 50px;
+  margin-right: 12px;
+}
+
+.site-title h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ccc;
+}
+
+.site-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.subheading {
+  margin: 0;
+  font-size: 12px;
+  color: #333;
 }
 
 .header-left h1 {
