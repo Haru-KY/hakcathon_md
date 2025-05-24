@@ -26,47 +26,47 @@ router.get('/auth/google', function (req, res){
 
 // 2. Google認証後にコールバックされるURLで認証コードを受け取り、トークンを取得する
 router.get('/', async function (req, res) {
-    console.log('callback session userid:', req.session.userid);
+  console.log('callback session userid:', req.session.userid);
   const code = req.query.code;
   if (!code) {
     return res.status(400).send('認証コードがありません');
   }
 
   try {
-    // OAuthクライアント作成
+    // トークン取得
     const client = new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
       process.env.REDIRECT_URI
     );
-
-    // トークン取得
     const { tokens } = await client.getToken(code);
     client.setCredentials(tokens);
-
-    // セッションにトークン保存
     req.session.tokens = tokens;
 
-    // ユーザー情報をGoogle APIから取得
-    const oauth2 = google.oauth2({
-      auth: client,
-      version: 'v2',
-    });
+    // メールアドレス取得
+    const oauth2 = google.oauth2({ auth: client, version: 'v2' });
     const userInfoResponse = await oauth2.userinfo.get();
     const email = userInfoResponse.data.email;
 
-    // DBにユーザー確認・登録
-    let user = await knex('users').where('email', email).first();
-    if (!user) {
-    const [insertId] = await knex('users').insert({ name: email });
-    user = await knex('users').where('id', insertId).first();
+    // DBにすでに同じemailがあるか確認
+    const existingUser = await knex('users').where({ email }).first();
+
+    // セッションのユーザーIDと一致しない＝他ユーザーが既にこのメールを使用
+    if (existingUser && existingUser.id !== req.session.userid) {
+      console.warn('メールアドレスが既存ユーザーと競合しています');
+      return res.redirect('/login?error=メールアドレスが他のアカウントに使用されています');
     }
-    req.session.user_id = user.id;
 
-    // ユーザーIDをセッションにセット
-    req.session.user_id = user.id;
+    // 新規 or 一致 → 更新または作成
+    let user;
+    if (!existingUser) {
+      await knex('users').where({ id: req.session.userid }).update({ email }); // セッション中のユーザーにemailを登録
+      user = await knex('users').where({ id: req.session.userid }).first();
+    } else {
+      user = existingUser;
+    }
 
-    // 認証後のページへリダイレクト
+    req.session.user_id = user.id;
     res.redirect('/summary');
 
   } catch (error) {
