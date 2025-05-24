@@ -237,7 +237,8 @@ router.get('/', checkAuth, async (req, res) => {
         created_at: new Date(time),
       };
       const emailId = await saveEmail(emailRecord, userId);
-      const matchedTags = parsed.tags.filter(t => tagNameToId[t]); // 有効なタグのみ抽出
+      const matchedTags = Array.isArray(parsed.tags) ? parsed.tags.filter(t => tagNameToId[t]) : [];
+
       await saveEmailTags(emailId, matchedTags.map(t => tagNameToId[t]), userId);
 
       results.push({
