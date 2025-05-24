@@ -459,3 +459,29 @@ body{
     margin-top: auto; 
     padding-bottom: 20px;
 }
+
+/* メール重要度設定 */
+/* .priority-1 {
+  background-color: #fffbe6; 
+}
+.priority-2 {
+  background-color: #fff0cc; 
+}
+.priority-3 {
+  background-color: #ffe0b2; 
+}
+.no-reply {
+  background-color: #f0f0f0; 
+}
+
+.priority-text {
+  font-size: 14px;
+  color: #e69500;
+  margin-top: 6px;
+}
+
+.no-reply {
+  font-size: 14px;
+  color: #777;
+  margin-top: 6px;
+} */

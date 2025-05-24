@@ -97,7 +97,10 @@
 
             <% if (emails && emails.length > 0) { %>
                 <% emails.forEach(function(email) { %>
+                <!--重要度の設定を行わない場合-->
                 <div class="email-block">
+                <!--重要度の設定を行う場合-->
+                <!-- <div class="email-block <%= email.replyRequired ? 'priority-' + email.priority : 'no-reply' %>"> -->
                     <p class="todo-description">
                     <%= email.subject %>
                     <button class="fav-btn <%= email.is_favorite ? 'active' : '' %>" name="like" data-id="<%= email.id %>">★</button>
@@ -105,9 +108,6 @@
                     <div class="summary-list">
                     <div class="summary">
                         <p><%= email.summary %></p>
-                        <!-- <li>
-                            <%= email.summary.replace(/\n/g, "<br>") %>
-                        </li> -->
                         <% if (email.message_id) { %>
                         <a href="/body?message_id=<%= email.message_id %>&page=<%= page %>">
                             <button type="button">原文を表示</button>
@@ -133,7 +133,6 @@
                         <% } %>
                         </div>
 
-                        <!-- <pre><%= JSON.stringify(email.tags) %></pre> -->
                         <!-- タグを追加するフォーム -->
                         <form action="/add-tag" method="post">
                         <input type="hidden" name="email_id" value="<%= email.id %>">
@@ -146,6 +145,18 @@
                         </select>
                         <button type="submit">追加</button>
                         </form>
+                        <!-- 重要度の表示(使わない場合コメントアウト) -->
+                        <!-- <div class="priority-display">
+                        <% if (email.replyRequired === false) { %>
+                            <p class="no-reply">返信不要</p>
+                        <% } else { %>
+                            <p class="priority-text">
+                            <% for (let i = 0; i < email.priority; i++) { %>
+                                ★
+                            <% } %>
+                            </p>
+                        <% } %>
+                        </div> -->
                     </div>
                     </div>
                 </div>
