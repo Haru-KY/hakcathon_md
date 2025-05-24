@@ -103,7 +103,7 @@
                             <%= email.summary.replace(/\n/g, "<br>") %>
                         </li> -->
                         <% if (email.message_id) { %>
-                        <a href="/body?message_id=<%= email.message_id %>">
+                        <a href="/body?message_id=<%= email.message_id %>&page=<%= page %>">
                             <button type="button">原文を表示</button>
                         </a>
                         <% } else { %>
@@ -145,12 +145,14 @@
             <% } %>
 
             <div class="page-btn">
-                <a href="/add">
-                    <button id="back-btn" class="nextback-btn" name="back">back</button>
+            <% if (page > 0) { %>
+                <a href="/summary?page=<%= page - 1 %>">
+                <button class="nextback-btn">Back</button>
                 </a>
-                <a href="/add">
-                    <button id="next-btn" class="nextback-btn" name="next">next</button>
-                </a>
+            <% } %>
+            <a href="/summary?page=<%= page + 1 %>">
+            <button class="nextback-btn">Next</button>
+            </a>
             </div>
 
         </section>
