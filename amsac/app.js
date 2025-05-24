@@ -13,7 +13,6 @@ import cookieParser from 'cookie-parser';
 
 import { fileURLToPath } from 'url';
 
-import indexRouter from './routes/index.js';
 import homeRouter from './routes/home.js';
 import loginRouter from './routes/login.js';
 import regiRouter from './routes/register.js';

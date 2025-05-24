@@ -121,16 +121,6 @@ async function saveEmailTags(emailId, tagIds, userId) {
   }
 }
 
-// // Ollamaプロンプトテンプレート
-// const summaryPrompt = new PromptTemplate({
-//   template: '次のメール本文を日本語で簡潔に要約してください：\n\n{emailBody}',
-//   inputVariables: ['emailBody'],
-// });
-// const tagPromptTemplate = new PromptTemplate({
-//   template: '以下のタグの中から、このメール本文に該当するものをすべてカンマ区切りで列挙してください。\n\nタグ一覧: {tags}\n\nメール本文:\n{emailBody}',
-//   inputVariables: ['tags', 'emailBody'],
-// });
-
 // LangChainのRunnableSequence作成（OllamaをLLMとして使う想定）
 const createOllamaChain = () => {
   return async ({ tags, emailBody }) => {
