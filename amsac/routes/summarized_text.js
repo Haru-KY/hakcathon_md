@@ -1,29 +1,26 @@
 import express from 'express';
 import { google } from 'googleapis';
 import { Ollama } from 'ollama';
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from "@langchain/core/runnables";
 import knex from '../db/db.js';  // knexを使う前提
 
-const jsonSummaryTagPrompt = ChatPromptTemplate.fromTemplate(
-  `以下のメール本文を読み、日本語で要約し、JSON形式で出力してください。
-  要約する文がhtml形式の場合、<br>もしくは</br>はすべてなくすようにお願いします。
-  出力は必ず1つのJSONコードブロックのみで、他の説明は不要です。
+const summaryPrompt = PromptTemplate.fromTemplate(
+  "次のメール本文を日本語で簡潔に要約してください：\n\n{emailBody}"
+);
 
-  次のタグのリストの中からメール本文の内容に合致しているタグを、カンマ区切りで正確に抽出してください。関係ない場合は出力しないでください。\n\nタグ一覧: {tags}\n\nメール本文:\n{emailBody}
-  次のメール本文の内容に返信が必要かどうかを「はい」または「いいえ」で判別してください。\n\n{emailBody}\n\n返信必要:
-  もし、返信が必要であると判断した場合、その重要度を1（低）～3（高）で答えてください。\n重要度が判断できない場合は「0」としてください。\n\n{emailBody}\n\n重要度:
+// タグ判定用プロンプト（変更済み）
+const tagPromptTemplate = PromptTemplate.fromTemplate(
+  "次のメール本文の内容に合致しているタグを、タグリストの中からカンマ区切りで正確に抽出してください。関係ない場合は出力しないでください。\n\nタグ一覧: {tags}\n\nメール本文:\n{emailBody}"
+);
+// 返信要否判定用プロンプト
+const replyPrompt = PromptTemplate.fromTemplate(
+  `次のメール本文の内容にに返信が必要かどうかを「はい」または「いいえ」で判別してください。\n\n{emailBody}\n\n返信必要:`
+);
 
-  タグ一覧: {tags}
-
-  出力形式（例）:
-  {{ 
-    "summary": "これは会議に関するメールです。",
-    "tags": ["会議", "予定"]
-  }}
-
-  メール本文:
-  {emailBody}`
+// 返信重要度判定用プロンプト
+const priorityPrompt = PromptTemplate.fromTemplate(
+  `次のメールに返信が必要な場合、その重要度を1（低）～3（高）で答えてください。\n重要度が判断できない場合は「0」としてください。\n\n{emailBody}\n\n重要度:`
 );
 
 
@@ -89,6 +86,8 @@ async function saveEmail(email, userId) {
         body: email.body,
         summary: email.summary,
         created_at: email.time,
+        needs_reply: parsed.needs_reply === 'はい' ? 1 : 0,
+        reply_importance: Number(parsed.reply_importance) || 0
       });
     return exists.id;
   } else {
@@ -100,13 +99,26 @@ async function saveEmail(email, userId) {
 // メールタグ関連をDBに保存
 async function saveEmailTags(emailId, tagIds, userId) {
   if (!tagIds.length) return;
-  await knex('email_ai_tags').where('email_id', emailId).del();
-  const insertRows = tagIds.map(tagId => ({
-    email_id: emailId,
-    tag_id: tagId,
-    user_id: userId
-  }));
-  await knex('email_ai_tags').insert(insertRows);
+
+  // 実在する tag_id だけを取得
+  const validTags = await knex('ai_tags')
+    .whereIn('id', tagIds)
+    .pluck('id');
+  if (!validTags.length) return;
+
+  await knex('email_ai_tags').where({ email_id: emailId }).del();
+
+  // 古い関連タグを削除
+  for (const tagId of validTags) {
+    try {
+      await knex('email_ai_tags')
+        .insert({ email_id: emailId, tag_id: tagId, user_id: userId })
+        .onConflict(['email_id', 'tag_id', 'user_id'])
+        .ignore();
+    } catch (err) {
+      console.error(`email_ai_tags挿入エラー:`, err);
+    }
+  }
 }
 
 // // Ollamaプロンプトテンプレート
@@ -121,18 +133,44 @@ async function saveEmailTags(emailId, tagIds, userId) {
 
 // LangChainのRunnableSequence作成（OllamaをLLMとして使う想定）
 const createOllamaChain = () => {
-  return RunnableSequence.from([
-    async (input) => {
-      return await jsonSummaryTagPrompt.format(input); // ← 明示的に文字列化
-    },
-    async (formattedPrompt) => {
-      const response = await ollama.chat({
+  return async ({ tags, emailBody }) => {
+    const formattedSummary = await summaryPrompt.format({ emailBody });
+    const summaryResponse = await ollama.chat({
+      model: 'gemma3:4b',
+      messages: [{ role: 'user', content: formattedSummary }],
+    });
+
+    const formattedTags = await tagPromptTemplate.format({ tags, emailBody });
+    const tagResponse = await ollama.chat({
+      model: 'gemma3:4b',
+      messages: [{ role: 'user', content: formattedTags }],
+    });
+
+    const formattedReply = await replyPrompt.format({ emailBody });
+    const replyResponse = await ollama.chat({
+      model: 'gemma3:4b',
+      messages: [{ role: 'user', content: formattedReply }],
+    });
+
+    const replyText = replyResponse.message?.content.trim().toLowerCase();
+    let priority = "0";
+
+    if (replyText === "はい") {
+      const formattedPriority = await priorityPrompt.format({ emailBody });
+      const priorityResponse = await ollama.chat({
         model: 'gemma3:4b',
-        messages: [{ role: 'user', content: formattedPrompt }],
+        messages: [{ role: 'user', content: formattedPriority }],
       });
-      return { text: response.message?.content || '' };
+      priority = priorityResponse.message?.content.trim() || "0";
     }
-  ]);
+
+    return {
+      summary: summaryResponse.message?.content.trim() || "要約なし",
+      tags: tagResponse.message?.content.split(',').map(t => t.trim()).filter(Boolean) || [],
+      needs_reply: replyText === "はい" ? "はい" : "いいえ",
+      reply_importance: priority,
+    };
+  };
 };
 
 // 認証済みかどうかをチェックするミドルウェア
@@ -151,7 +189,12 @@ router.get('/', checkAuth, async (req, res) => {
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
 
     // タグ取得
-    const dbTags = await fetchTags();
+
+    async function fetchAiTags() {
+    const rows = await knex('ai_tags').select('id', 'name');
+    return rows;
+    }
+    const dbTags = await fetchAiTags();
     const tagNameToId = {};
     const tagNames = dbTags.map(t => {
       tagNameToId[t.name] = t.id;
@@ -203,12 +246,13 @@ router.get('/', checkAuth, async (req, res) => {
       const time = headers.find(h => h.name === 'Date')?.value || new Date().toISOString();
       const body = extractBody(message.payload);
 
-      const output = await chain.invoke({ tags: tagNames.join(', '), emailBody: body });
+      const output = await chain({ tags: tagNames.join(', '), emailBody: body });
+      console.log("chain output:", output);
+
 
       let parsed;
       try {
-        const cleaned = cleanJsonString(output.text);
-        parsed = JSON.parse(cleaned);
+        parsed = output;
       } catch (err) {
         console.error("JSON parse error:", err.message);
         console.error("Invalid data was:", output.text.slice(0, 300));
@@ -221,8 +265,10 @@ router.get('/', checkAuth, async (req, res) => {
         subject,
         body,
         author: from,
-        summary: parsed.summary || '要約なし',
+        summary: output.summary || '要約なし',
         created_at: new Date(time),
+        needs_reply: output.needs_reply === 'はい' ? 1 : 0,
+        reply_importance: Number(output.reply_importance) || 0,
       };
       const emailId = await saveEmail(emailRecord, userId);
       const matchedTags = Array.isArray(parsed.tags) ? parsed.tags.filter(t => tagNameToId[t]) : [];
