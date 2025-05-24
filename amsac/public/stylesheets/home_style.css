@@ -81,11 +81,7 @@ header {
   color: #333;
 }
 
-.subheading {
-  margin: 0;
-  font-size: 12px;
-  color: #333;
-}
+
 
 .header-left h1 {
   margin: 0;
@@ -94,7 +90,7 @@ header {
 .subheading {
   font-size: 0.85rem;
   margin: 0;
-  color: #fff;
+  color: #ccc;
 }
 
 .login-btn {
