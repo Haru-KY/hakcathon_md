@@ -121,6 +121,31 @@ main {
   margin-bottom: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.hero h1, .hero p {
+  font-size: clamp(1.2rem, 5vw, 2rem);  /* 画面幅に応じたサイズ */
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 90%;
+  word-break: break-word;
+}
+
+@media screen and (max-width: 600px) {
+  .hero h1,
+  .hero p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+  }
+
+  .hero {
+    padding: 1.5rem 1rem;
+  }
 }
 
 .about {

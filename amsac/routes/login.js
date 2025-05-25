@@ -59,7 +59,8 @@ router.post("/", async function (req, res, next){
         }
 
         req.session.userid = user.id;
-        return res.redirect("/oauth2callback/auth/google");
+        return res.redirect("/add");
+        // return res.redirect("/oauth2callback/auth/google");
     } catch (err) {
         console.error(err);
         res.render("login", {
