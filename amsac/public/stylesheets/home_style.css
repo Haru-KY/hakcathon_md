@@ -135,7 +135,7 @@ main {
   word-break: break-word;
 }
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
   .hero-content h1,
   .hero-content p {
     font-size: 1.2rem;
@@ -145,7 +145,7 @@ main {
   .hero {
     padding: 1.5rem 1rem;
   }
-}
+} */
 
 .about {
     max-width: 900px;
