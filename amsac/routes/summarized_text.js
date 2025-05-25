@@ -276,13 +276,14 @@ router.get('/', checkAuth, async (req, res) => {
       return res.status(401).send('ユーザーが存在しません');
     }
 
-    const { tag, aitag, favorite } = req.query;  // pageはここでは分割代入しない
+    const { tag, aitag, favorite, needs_reply } = req.query;  // pageはここでは分割代入しない
 
     // 以降、pageを使う
     let redirectUrl = `/add?page=${page}`;
     if (tag) redirectUrl += `&tag=${encodeURIComponent(tag)}`;
     if (aitag) redirectUrl += `&aitag=${encodeURIComponent(aitag)}`;
     if (favorite) redirectUrl += `&favorite=${favorite}`;
+    if (needs_reply) redirectUrl += `&needs_reply=${needs_reply}`;
 
     res.redirect(redirectUrl);
 

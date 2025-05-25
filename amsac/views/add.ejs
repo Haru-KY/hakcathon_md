@@ -79,6 +79,9 @@
                 <form action="/" >
                     <li name="favorite"><a href="/add?favorite=true">FAVORITE</a></li>
                 </form>
+                <form action="/" >
+                    <li name="reply"><a href="/add?needs_reply=1">NEEDS_REPLY</a></li>
+                </form>
                 <form action="/logout" >
                 <li name="logout"><a href="/logout">LOGOUT</a></li>
                 </form>
@@ -145,6 +148,7 @@
                         </select>
                         <button type="submit">追加</button>
                         </form>
+                        <p>needsReply = "<%= needsReply %>" (type: <%= typeof needsReply %>)</p>
                         <!-- 重要度の表示(使わない場合コメントアウト) -->
                         <div class="priority-display">
                         <% if (email.replyRequired === 0) { %>
@@ -173,16 +177,17 @@
                 <% if (typeof currentTag !== 'undefined') { baseQuery.push(`tag=${encodeURIComponent(currentTag)}`); } %>
                 <% if (typeof currentAiTag !== 'undefined') { baseQuery.push(`aitag=${encodeURIComponent(currentAiTag)}`); } %>
                 <% if (typeof favorite !== 'undefined') { baseQuery.push(`favorite=true`); } %>
+                <% if (typeof needsReply !== 'undefined' && (needsReply.toString() === 'true' || needsReply.toString() === '1')) { baseQuery.push('needs_reply=true'); } %>
                 <% const queryStr = baseQuery.join('&'); %>
 
-                <% if (page > 0) { %>
-                    <a href="/summary?<%= queryStr %>&page=<%= page - 1 %>">
-                        <button class="nextback-btn">Back</button>
-                    </a>
+                <% if (page > 1) { %>
+                <a href="/summary?<%= queryStr %>&page=<%= page - 1 %>">
+                    <button class="nextback-btn">Back</button>
+                </a>
                 <% } %>
                 <p>ページ<%= page %></p>
                 <a href="/summary?<%= queryStr %>&page=<%= page + 1 %>">
-                    <button class="nextback-btn">Next</button>
+                <button class="nextback-btn">Next</button>
                 </a>
             </div>
 
