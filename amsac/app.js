@@ -25,7 +25,7 @@ import authRouter from './routes/gmailOAuth.js';
 import bodyRouter from './routes/mail_detail.js';
 import mailaddRouter from './routes/addMail_tag.js';
 import accountdeleteRouter from './routes/deleteaccount.js';
-import removeTagRouter from './routes/remove_tag.js';
+import removeTagRouter from './routes/remove_tags.js';
 var app = express();
 
 

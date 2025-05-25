@@ -48,8 +48,9 @@
                                     <a href="/add?tag=<%= encodeURIComponent(tag.name) %><%= favorite ? '&favorite=true' : '' %><%= currentAiTag ? '&aitag=' + encodeURIComponent(currentAiTag) : '' %>">
                                     <%= tag.name %>
                                     </a>
-                                    <form action="/remove-tag" method="get" class="tag-form-side" onsubmit="return confirm('このタグを削除しますか？');">
+                                    <form action="/remove-tag" method="post" class="tag-form-side" onsubmit="return confirm('このタグを削除しますか？');">
                                         <input type="hidden" name="tag_id" value="<%= tag.id %>">
+                                        <input type="hidden" name="tag_type" value="tag"> <!-- または "ai_tag" -->
                                         <button type="submit" class="tag-remove-btn-side">✕</button>
                                     </form>
                                 </li>
@@ -72,8 +73,9 @@
                                     <a href="/add?aitag=<%= encodeURIComponent(ai_tag.name) %><%= favorite ? '&favorite=true' : '' %>">
                                         <%= ai_tag.name %>
                                     </a>
-                                    <form action="/remove-ai-tag" method="get" class="tag-form-side" onsubmit="return confirm('このAIタグを削除しますか？');">
+                                    <form action="/remove-tag" method="post" class="tag-form-side" onsubmit="return confirm('このタグを削除しますか？');">
                                         <input type="hidden" name="tag_id" value="<%= ai_tag.id %>">
+                                        <input type="hidden" name="tag_type" value="ai_tag"> <!-- または "ai_tag" -->
                                         <button type="submit" class="tag-remove-btn-side">✕</button>
                                     </form>
                                 </li>
@@ -135,7 +137,7 @@
                             <input type="hidden" name="tag_id" value="<%= tag.id %>">
                             <button type="submit" class="tag">
                                 <%= tag.name %>
-                                <span class="tag-remove-btn">✕</span><!-- 削除ボタン -->
+                                <a href="/remove-tag?email_id=<%= email.id %>&tag_id=<%= tag.id %>" class="tag-remove-btn">✕</a>
                             </button>
                             </form>
                             <% }); %>
