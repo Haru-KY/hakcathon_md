@@ -50,7 +50,7 @@
                                     </a>
                                     <form action="/remove-tag" method="get" class="tag-form-side" onsubmit="return confirm('このタグを削除しますか？');">
                                         <input type="hidden" name="tag_id" value="<%= tag.id %>">
-                                        <button type="submit" class="tag-remove-btn">✕</button>
+                                        <button type="submit" class="tag-remove-btn-side">✕</button>
                                     </form>
                                 </li>
                             <% }); %>
@@ -74,7 +74,7 @@
                                     </a>
                                     <form action="/remove-ai-tag" method="get" class="tag-form-side" onsubmit="return confirm('このAIタグを削除しますか？');">
                                         <input type="hidden" name="tag_id" value="<%= ai_tag.id %>">
-                                        <button type="submit" class="tag-remove-btn">✕</button>
+                                        <button type="submit" class="tag-remove-btn-side">✕</button>
                                     </form>
                                 </li>
                             <% }); %>
