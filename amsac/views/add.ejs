@@ -146,17 +146,20 @@
                         <button type="submit">追加</button>
                         </form>
                         <!-- 重要度の表示(使わない場合コメントアウト) -->
-                        <!-- <div class="priority-display">
-                        <% if (email.replyRequired === false) { %>
+                        <div class="priority-display">
+                        <% if (email.replyRequired === 0) { %>
                             <p class="no-reply">返信不要</p>
                         <% } else { %>
                             <p class="priority-text">
                             <% for (let i = 0; i < email.priority; i++) { %>
                                 ★
                             <% } %>
+                            <% if (email.priority === 0) { %>
+                            <p>一度確認した方が良いかもしれません</p>
+                            <% } %>
                             </p>
                         <% } %>
-                        </div> -->
+                        </div>
                     </div>
                     </div>
                 </div>

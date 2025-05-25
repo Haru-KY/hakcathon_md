@@ -27,7 +27,7 @@ router.get( '/', async function ( req, res, next) {
         const offset = (page - 1) * limit;
 
         let emailsQuery = knex("email")
-            .select("id","message_id", "subject", "is_favorite", "body", "summary", "created_at")
+            .select("id","message_id", "subject", "is_favorite", "body", "summary", "created_at", "needs_reply", "reply_importance")
             .where("user_id", userId)
 
         if (tagName && tagName.trim() !== ""){
@@ -119,7 +119,11 @@ router.get( '/', async function ( req, res, next) {
         .offset(offset);
 
         const hasNextPage = emailsRaw.length > limit;
-        const emails = hasNextPage ? emailsRaw.slice(0, limit) : emailsRaw;
+        const emails = (hasNextPage ? emailsRaw.slice(0, limit) : emailsRaw).map(email => ({
+            ...email,
+            replyRequired: email.needs_reply,
+            priority: email.reply_importance,
+        }));
 
 
 
@@ -160,7 +164,7 @@ router.get( '/', async function ( req, res, next) {
             page: parseInt(req.query.page || '0'),
             currentTag: req.query.tag,
             currentAiTag: req.query.aitag,
-            favorite: req.query.favorite
+            favorite: req.query.favorite,
         });
     } catch (err) {
 
