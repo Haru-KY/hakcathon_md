@@ -474,7 +474,7 @@ body{
 }
 
 /* メール重要度設定 */
-/* .priority-1 {
+.priority-1 {
   background-color: #fffbe6; 
 }
 .priority-2 {
@@ -497,4 +497,4 @@ body{
   font-size: 14px;
   color: #777;
   margin-top: 6px;
-} */
+}

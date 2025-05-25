@@ -20,6 +20,7 @@ router.get( '/', async function ( req, res, next) {
         const tagName = req.query.tag;
         const aiTagName = (!req.query.tag || req.query.tag.trim() === "") ? req.query.aitag : null;
         const favorite = req.query.favorite;
+        const needsReply = req.query.needs_reply;
 
         // ページネーションの設定
         const page = parseInt(req.query.page) || 1;
@@ -27,7 +28,7 @@ router.get( '/', async function ( req, res, next) {
         const offset = (page - 1) * limit;
 
         let emailsQuery = knex("email")
-            .select("id","message_id", "subject", "is_favorite", "body", "summary", "created_at")
+            .select("id","message_id", "subject", "is_favorite", "body", "summary", "created_at", "needs_reply", "reply_importance")
             .where("user_id", userId)
 
         if (tagName && tagName.trim() !== ""){
@@ -100,6 +101,10 @@ router.get( '/', async function ( req, res, next) {
         
         }
 
+        if (req.query.needs_reply === "true") {
+            emailsQuery.where("needs_reply", 1);
+        }
+
 
         const countQuery =  knex("email").where("user_id", userId);
         const totalResult = await countQuery.count("id as count").first();
@@ -119,7 +124,11 @@ router.get( '/', async function ( req, res, next) {
         .offset(offset);
 
         const hasNextPage = emailsRaw.length > limit;
-        const emails = hasNextPage ? emailsRaw.slice(0, limit) : emailsRaw;
+        const emails = (hasNextPage ? emailsRaw.slice(0, limit) : emailsRaw).map(email => ({
+            ...email,
+            replyRequired: email.needs_reply,
+            priority: email.reply_importance,
+        }));
 
 
 
@@ -157,10 +166,11 @@ router.get( '/', async function ( req, res, next) {
             pageSize: limit,
             cursor: offset,
             totalThreads: totalCount,
-            page: parseInt(req.query.page || '0'),
+            page: parseInt(req.query.page) || 1,
             currentTag: req.query.tag,
             currentAiTag: req.query.aitag,
-            favorite: req.query.favorite
+            favorite: req.query.favorite,
+            needsReply: req.query.needs_reply,
         });
     } catch (err) {
 
