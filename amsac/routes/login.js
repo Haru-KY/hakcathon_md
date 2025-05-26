@@ -7,7 +7,7 @@ import knex from "../db/db.js";
 
 router.get('/', function(req, res, next){
 
-    const userId = req.session.userid;
+    const userId = req.session.user_id;
     const isAuth = Boolean(userId);
 
     res.render('login', {
@@ -58,9 +58,18 @@ router.post("/", async function (req, res, next){
             });
         }
 
-        req.session.userid = user.id;
-        return res.redirect("/add");
-        // return res.redirect("/oauth2callback/auth/google");
+        req.session.user_id = user.id;
+        req.session.save(err => {
+        if (err) {
+            console.error('Session save error:', err);
+            return res.render("login", {
+            title: "login",
+            error: ["セッション保存時にエラーが発生しました"],
+            isAuth: false
+            });
+        }
+        return res.redirect("/oauth2callback/auth/google");
+        });
     } catch (err) {
         console.error(err);
         res.render("login", {

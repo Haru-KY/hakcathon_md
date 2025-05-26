@@ -7,8 +7,9 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
-import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
+
 
 
 import { fileURLToPath } from 'url';
@@ -39,17 +40,22 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-
-  secret: "mdmdMDMD*!*",
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: true,
-
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,  // 1日
+    secure: false,                // 開発環境ならfalse、HTTPS本番環境ならtrue
+    httpOnly: true,
+    sameSite: "lax",             // ここを追加
+  }
 }));
+
 
 app.use('/', homeRouter);
 app.use('/login', loginRouter);

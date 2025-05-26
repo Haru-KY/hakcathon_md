@@ -3,8 +3,11 @@ import express from 'express';
 const router = express.Router();
 import knex from '../db/db.js';
 
+import { requireLogin } from '../utils/authUtils.js';
+router.use(requireLogin);
+
 router.get('/', async function (req, res) {
-    const userId = req.session.userid;
+    const userId = req.session.user_id;
     if (!userId) return res.redirect('/login');
 
     const messageId = req.query.message_id;
