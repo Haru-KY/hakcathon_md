@@ -2,10 +2,12 @@ import express from 'express';
 import knex from '../db/db.js';
 
 const router = express.Router();
+import { requireLogin } from '../utils/authUtils.js';
+router.use(requireLogin);
 
 router.post('/', async (req, res) => {
   const { emailId } = req.body;
-  const userId = req.session.userid;
+  const userId = req.session.user_id;
 
   console.log("Session info:", req.session);
 

@@ -28,7 +28,7 @@ router.get('/auth/google', function (req, res){
 
 // 2. Google認証後にコールバックされるURLで認証コードを受け取り、トークンを取得する
 router.get('/', async function (req, res) {
-  console.log('callback session userid:', req.session.userid);
+  console.log('callback session userid:', req.session.user_id);
   const code = req.query.code;
   if (!code) {
     return res.status(400).send('認証コードがありません');
@@ -43,7 +43,11 @@ router.get('/', async function (req, res) {
     );
     const { tokens } = await client.getToken(code);
     client.setCredentials(tokens);
-    req.session.tokens = tokens;
+    req.session.tokens = {
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      expiry_date: tokens.expiry_date,
+    };
 
     // メールアドレス取得
     const oauth2 = google.oauth2({ auth: client, version: 'v2' });
@@ -54,7 +58,7 @@ router.get('/', async function (req, res) {
     const existingUser = await knex('users').where({ email }).first();
 
     // セッションのユーザーIDと一致しない＝他ユーザーが既にこのメールを使用
-    if (existingUser && existingUser.id !== req.session.userid) {
+    if (existingUser && existingUser.id !== req.session.user_id) {
       console.warn('メールアドレスが既存ユーザーと競合しています');
       return res.redirect('/login?error=メールアドレスが他のアカウントに使用されています');
     }
@@ -62,8 +66,8 @@ router.get('/', async function (req, res) {
     // 新規 or 一致 → 更新または作成
     let user;
     if (!existingUser) {
-      await knex('users').where({ id: req.session.userid }).update({ email }); // セッション中のユーザーにemailを登録
-      user = await knex('users').where({ id: req.session.userid }).first();
+      await knex('users').where({ id: req.session.user_id }).update({ email }); // セッション中のユーザーにemailを登録
+      user = await knex('users').where({ id: req.session.user_id }).first();
     } else {
       user = existingUser;
     }

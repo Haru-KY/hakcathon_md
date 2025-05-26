@@ -5,6 +5,9 @@ import { PromptTemplate } from '@langchain/core/prompts';
 
 const router = express.Router();
 
+import { requireLogin } from '../utils/authUtils.js';
+router.use(requireLogin);
+
 // プロンプト定義
 const tagPromptTemplate = PromptTemplate.fromTemplate(
   `以下のメール本文を読み取り、その内容を反映した分類用タグを最大3つ、日本語で、カンマ区切りで出力してください。出力は必ず以下の形式で、タグ名のみとし、説明や文章は一切不要です。
@@ -81,7 +84,7 @@ export const processReplyInfoForUser = async (userId) => {
 }
 router.post("/", async function (req, res) {
   try {
-    const userId = req.session.userid;
+    const userId = req.session.user_id;
     if (!userId) return res.redirect("/login");
 
     console.log("req.body:", req.body); // デバッグ用

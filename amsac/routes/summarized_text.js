@@ -3,8 +3,10 @@ import { google } from 'googleapis';
 import { Ollama } from 'ollama';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { RunnableSequence } from "@langchain/core/runnables";
-import knex from '../db/db.js';  // knexを使う前提
+import { getAuthorizedClient } from '../utils/authUtils.js';
+import { requireLogin } from '../utils/authUtils.js';
 
+import knex from '../db/db.js';  // knexを使う前提
 const summaryPrompt = PromptTemplate.fromTemplate(
   "次のメール本文を日本語で簡潔に要約してください：\n\n{emailBody}"
 );
@@ -26,6 +28,8 @@ const priorityPrompt = PromptTemplate.fromTemplate(
 
 const router = express.Router();
 const ollama = new Ollama();
+
+router.use(requireLogin);
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
@@ -175,8 +179,8 @@ function checkAuth(req, res, next) {
 router.get('/', checkAuth, async (req, res) => {
   try {
     const userId = req.session.user_id;
-    oauth2Client.setCredentials(req.session.tokens);
-    const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+    const authClient = await getAuthorizedClient(req.session);
+    const gmail = google.gmail({ version: 'v1', auth: authClient });
 
     // タグ取得
 

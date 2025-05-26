@@ -1,21 +1,18 @@
 import express from 'express';
 const router = express.Router();
+import { requireLogin } from '../utils/authUtils.js';
 
 import knex from "../db/db.js";
 
+router.use(requireLogin);
+
 router.get( '/', async function ( req, res, next) {
+    console.log('Session:', req.session);
+    console.log('User ID:', req.session?.user_id);
 
     try {
-        const userId = req.session.userid;
-
-        if(!userId)
-        {
-
-            return res.redirect('/login');
-
-        }
-
-  
+        const userId = req.session.user_id;
+        console.log('Login successful, session user_id:', req.session.user_id);
 
         const tagName = req.query.tag;
         const aiTagName = (!req.query.tag || req.query.tag.trim() === "") ? req.query.aitag : null;
@@ -41,8 +38,9 @@ router.get( '/', async function ( req, res, next) {
             if (tag) {
 
                 const emailIds = await knex("email_tags")
-                    .pluck("email_id")
-                    .where({ tag_id: tag.id, user_id: userId });
+                .where({ tag_id: tag.id, user_id: userId })
+                .select("email_id")
+                .then(rows => rows.map(row => row.email_id));
 
                 if(emailIds.length > 0)
                 {
@@ -119,9 +117,6 @@ router.get( '/', async function ( req, res, next) {
             .limit(limit + 1)
             .offset(offset)
         // ここにタグやフィルター条件も適用
-        .orderBy("created_at", "desc")
-        .limit(limit + 1)
-        .offset(offset);
 
         const hasNextPage = emailsRaw.length > limit;
         const emails = (hasNextPage ? emailsRaw.slice(0, limit) : emailsRaw).map(email => ({
@@ -173,11 +168,9 @@ router.get( '/', async function ( req, res, next) {
             needsReply: req.query.needs_reply,
         });
     } catch (err) {
-
-        console.error(err);
-        res.status(500).send("サーバーエラー");
-
-    }
+  console.error(err.stack || err);
+  res.status(500).send("サーバーエラー");
+}
 });
 
 export default router;
